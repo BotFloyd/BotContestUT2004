@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<javadocOptions>
+  <docletArtifacts>
+    <docletArtifact>
+      <groupId>org.umlgraph</groupId>
+      <artifactId>doclet</artifactId>
+      <version>5.1</version>
+    </docletArtifact>
+  </docletArtifacts>
+  <tagletArtifacts>
+    <tagletArtifact />
+  </tagletArtifacts>
+  <links>
+    <link>http://download.oracle.com/javase/6/docs/api</link>
+  </links>
+  <javadocResourcesDirectory>src/main/javadoc</javadocResourcesDirectory>
+</javadocOptions>
