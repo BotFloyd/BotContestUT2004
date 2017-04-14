@@ -15,11 +15,14 @@ import cz.cuni.amis.utils.exception.PogamutException;
 
 public class EmptyBot extends UT2004BotModuleController {
 
+    Behavior test;
+    MedKit medkit = new MedKit(this);
+    Collect collect = new Collect(this);
     @Override
     public Initialize getInitializeCommand() {
     	// uncomment to have the bot less skill (make him miss occasionally)
     	Initialize uneVar = super.getInitializeCommand().setLocation(new Location(2784,-2399,-78));
-        uneVar.setDesiredSkill(7);
+        uneVar.setDesiredSkill(2);
         uneVar.setName("Tamere");
         uneVar.setSkin("HumanMaleA.MercMaleA");
         return uneVar;
@@ -31,10 +34,11 @@ public class EmptyBot extends UT2004BotModuleController {
     public void logic() throws PogamutException {
         cheatArme();
         if(info.getHealth()<70 && !navigation.isNavigating()){
-           MedKit test = new MedKit(this);
-           test.performed();
-       
+           test = medkit;
+        } else {
+           test = collect;
         }
+        test.performed();
         /*
         if (players.canSeePlayers()) {
             Player player1 = players.getNearestVisiblePlayer();
