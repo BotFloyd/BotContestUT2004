@@ -7,9 +7,9 @@ import cz.cuni.amis.pogamut.ut2004.bot.params.UT2004BotParameters;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.AddInventory;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Initialize;
-import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Rotate;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotDamaged;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotKilled;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerKilled;
 import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
 import cz.cuni.amis.utils.exception.PogamutException;
@@ -17,13 +17,15 @@ import cz.cuni.amis.utils.exception.PogamutException;
 public class EmptyBot extends UT2004BotModuleController {
 
     Behavior test;
+    Pursue pursue = new Pursue(this);
     MedKit medkit = new MedKit(this);
     Collect collect = new Collect(this);
-    Defense defense = new Defense(this);
+    Player target;
+    
     @Override
     public Initialize getInitializeCommand() {
     	// uncomment to have the bot less skill (make him miss occasionally)
-    	Initialize uneVar = super.getInitializeCommand().setLocation(new Location(2784,-2399,-78));
+    	Initialize uneVar = super.getInitializeCommand();
         uneVar.setDesiredSkill(2);
         uneVar.setName("Tamere");
         uneVar.setSkin("HumanMaleA.MercMaleA");
@@ -35,15 +37,28 @@ public class EmptyBot extends UT2004BotModuleController {
     @Override
     public void logic() throws PogamutException {
         cheatArme();
-        if(info.getHealth()<70 && !navigation.isNavigating()){
-           test = medkit;
-        } if(!players.canSeeEnemies() && senses.isBeingDamaged()){
-            test = defense;
+        if(players.canSeeEnemies()){
+            if(navigation.isNavigating()){
+                navigation.stopNavigation();
+            }
+            if(target == null || !target.isVisible()){
+                target = players.getNearestVisibleEnemy();
+            }
+            test = null;
+            body.getCommunication().sendGlobalTextMessage("I see you");
+        } else if(target != null && weaponry.hasLoadedRangedWeapon()){
+            body.getCommunication().sendGlobalTextMessage("I follow you");
+            test = pursue;
+        } else if(info.getHealth()<70 && !navigation.isNavigating()){
+            body.getCommunication().sendGlobalTextMessage("I need health");
+            test = medkit;
+        } else {
+            body.getCommunication().sendGlobalTextMessage("I am roaming");
+            test = collect;
         }
-        else {
-           test = collect;
+        if(test != null){
+            test.performed();
         }
-        test.performed();
         /*
         if (players.canSeePlayers()) {
             Player player1 = players.getNearestVisiblePlayer();
@@ -110,6 +125,14 @@ public class EmptyBot extends UT2004BotModuleController {
         if (event.isDirectDamage()) {
             
         }
+    }
+    
+    public Player getTarget(){
+        return target;
+    }
+    
+    public void setTarget(Player target){
+        this.target = target;
     }
 
     
