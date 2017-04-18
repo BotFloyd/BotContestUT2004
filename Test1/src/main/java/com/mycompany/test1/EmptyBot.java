@@ -25,7 +25,7 @@ public class EmptyBot extends UT2004BotModuleController {
     @Override
     public Initialize getInitializeCommand() {
     	// uncomment to have the bot less skill (make him miss occasionally)
-    	Initialize uneVar = super.getInitializeCommand().setLocation(new Location(2784,-2399,-78));
+    	Initialize uneVar = super.getInitializeCommand();
         uneVar.setDesiredSkill(2);
         uneVar.setName("Tamere");
         uneVar.setSkin("HumanMaleA.MercMaleA");
