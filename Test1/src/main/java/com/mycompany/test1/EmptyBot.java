@@ -1,13 +1,11 @@
 package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
-import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.bot.params.UT2004BotParameters;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.AddInventory;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Initialize;
-import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Rotate;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotDamaged;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotKilled;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerKilled;
@@ -23,7 +21,7 @@ public class EmptyBot extends UT2004BotModuleController {
     @Override
     public Initialize getInitializeCommand() {
     	// uncomment to have the bot less skill (make him miss occasionally)
-    	Initialize uneVar = super.getInitializeCommand().setLocation(new Location(2784,-2399,-78));
+    	Initialize uneVar = super.getInitializeCommand();
         uneVar.setDesiredSkill(2);
         uneVar.setName("Tamere");
         uneVar.setSkin("HumanMaleA.MercMaleA");
@@ -37,10 +35,9 @@ public class EmptyBot extends UT2004BotModuleController {
         cheatArme();
         if(info.getHealth()<70 && !navigation.isNavigating()){
            test = medkit;
-        } if(!players.canSeeEnemies() && senses.isBeingDamaged()){
-            test = defense;
-        }
-        else {
+        } else if (!players.canSeeEnemies() && senses.isBeingDamaged()){
+           test = defense;
+        } else {
            test = collect;
         }
         test.performed();
