@@ -1,2 +1,2 @@
 # BotContestUT2004
-Project for the BotConstest competition
+Project for the BotContest competition
