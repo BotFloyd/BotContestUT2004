@@ -15,10 +15,11 @@ import cz.cuni.amis.utils.exception.PogamutException;
 
 public class Repliquant extends UT2004BotModuleController {
 
-    Behavior test;
+    Behavior now, before = null;
     Pursue pursue = new Pursue(this);
     MedKit medkit = new MedKit(this);
     Collect collect = new Collect(this);
+    Engage engage = new Engage(this);
     Player target;
     
     @Override
@@ -43,21 +44,22 @@ public class Repliquant extends UT2004BotModuleController {
             if(target == null || !target.isVisible()){
                 target = players.getNearestVisibleEnemy();
             }
-            test = null;
+            now = engage;
             body.getCommunication().sendGlobalTextMessage("I see you");
         } else if(target != null && weaponry.hasLoadedRangedWeapon()){
             body.getCommunication().sendGlobalTextMessage("I follow you");
-            test = pursue;
+            now = pursue;
         } else if(info.getHealth()<70 && !navigation.isNavigating()){
             body.getCommunication().sendGlobalTextMessage("I need health");
-            test = medkit;
+            now = medkit;
         } else {
             body.getCommunication().sendGlobalTextMessage("I am roaming");
-            test = collect;
+            now = collect;
         }
-        if(test != null){
-            test.performed();
-        }
+        //if (now.equals(before)) {
+            now.performed();
+          //  before = now;
+        //}
         /*
         if (players.canSeePlayers()) {
             Player player1 = players.getNearestVisiblePlayer();

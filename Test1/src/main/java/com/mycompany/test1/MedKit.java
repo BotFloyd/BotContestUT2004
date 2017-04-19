@@ -12,20 +12,20 @@ import java.util.Map;
 
 public class MedKit extends Behavior {
     
-    private Repliquant bot;
     private TabooSet <Item> tabooItems;
     
     public MedKit (Repliquant bot) {
         super(bot);
-        this.tabooItems = new TabooSet(bot.getBot());
     }
     
     public void performed () {
-        double moreTime = bot.getRandom().nextDouble() + 0.75;
-        IUT2004Navigation navigation = bot.getNavigation();
-        LogCategory log = bot.getLog();
-        Items items = bot.getItems();
+        double moreTime = getBot().getRandom().nextDouble() + 0.75;
+        IUT2004Navigation navigation = getBot().getNavigation();
+        LogCategory log = getBot().getLog();
+        Items items = getBot().getItems();
         Item item = items.getNearestVisibleItem(ItemType.Category.HEALTH);
+        if (tabooItems == null)
+            tabooItems = new TabooSet(getBot().getBot());
         if (item != null) {
             log.info("Found item, let's go !");
             navigation.navigate(item);
