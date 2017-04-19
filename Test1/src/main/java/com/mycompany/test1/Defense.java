@@ -13,7 +13,7 @@ import java.util.logging.Level;
 
 public class Defense extends Behavior{
     
-    public Defense(EmptyBot bot){
+    public Defense(Repliquant bot){
         super(bot);
     }
     

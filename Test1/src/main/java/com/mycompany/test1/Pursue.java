@@ -17,7 +17,6 @@
 
 package com.mycompany.test1;
 
-import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 
 /**
@@ -25,8 +24,8 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
  * @author Kedrisse
  */
 public class Pursue extends Behavior{
-    
-    public Pursue(EmptyBot unBot) {
+
+    public Pursue(Repliquant unBot) {
         super(unBot);
     }
     

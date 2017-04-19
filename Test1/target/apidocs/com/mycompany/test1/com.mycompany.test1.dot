@@ -9,11 +9,55 @@ digraph G {
 	node [fontname="arial",fontsize=10,shape=plaintext];
 	nodesep=0.25;
 	ranksep=0.5;
-	// com.mycompany.test1.EmptyBot
-	c0 [label=<<table title="com.mycompany.test1.EmptyBot" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./EmptyBot.html">
+	// com.mycompany.test1.Repliquant
+	c0 [label=<<table title="com.mycompany.test1.Repliquant" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Repliquant.html">
 		<tr><td><table border="0" cellspacing="0" cellpadding="1">
-<tr><td align="center" balign="center"> EmptyBot </td></tr>
+<tr><td align="center" balign="center"> Repliquant </td></tr>
 		</table></td></tr>
 		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	// com.mycompany.test1.Pursue
+	c1 [label=<<table title="com.mycompany.test1.Pursue" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Pursue.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Pursue </td></tr>
+		</table></td></tr>
+		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	// com.mycompany.test1.MedKit
+	c2 [label=<<table title="com.mycompany.test1.MedKit" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./MedKit.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> MedKit </td></tr>
+		</table></td></tr>
+		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	// com.mycompany.test1.Deplacement
+	c3 [label=<<table title="com.mycompany.test1.Deplacement" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Deplacement.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Deplacement </td></tr>
+		</table></td></tr>
+		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	// com.mycompany.test1.Defense
+	c4 [label=<<table title="com.mycompany.test1.Defense" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Defense.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Defense </td></tr>
+		</table></td></tr>
+		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	// com.mycompany.test1.Collect
+	c5 [label=<<table title="com.mycompany.test1.Collect" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Collect.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"> Collect </td></tr>
+		</table></td></tr>
+		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	// com.mycompany.test1.Behavior
+	c6 [label=<<table title="com.mycompany.test1.Behavior" border="0" cellborder="1" cellspacing="0" cellpadding="2" port="p" href="./Behavior.html">
+		<tr><td><table border="0" cellspacing="0" cellpadding="1">
+<tr><td align="center" balign="center"><font face="ariali"> Behavior </font></td></tr>
+		</table></td></tr>
+		</table>>, fontname="arial", fontcolor="black", fontsize=10.0];
+	//com.mycompany.test1.Pursue extends com.mycompany.test1.Behavior
+	c6:p -> c1:p [dir=back,arrowtail=empty];
+	//com.mycompany.test1.MedKit extends com.mycompany.test1.Behavior
+	c6:p -> c2:p [dir=back,arrowtail=empty];
+	//com.mycompany.test1.Defense extends com.mycompany.test1.Behavior
+	c6:p -> c4:p [dir=back,arrowtail=empty];
+	//com.mycompany.test1.Collect extends com.mycompany.test1.Behavior
+	c6:p -> c5:p [dir=back,arrowtail=empty];
 }
 

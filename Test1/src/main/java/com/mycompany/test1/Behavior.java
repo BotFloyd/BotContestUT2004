@@ -23,15 +23,27 @@ package com.mycompany.test1;
  */
 public abstract class Behavior {
     
-    private final EmptyBot unBot;
+    private final Repliquant unBot;
     
-    public Behavior(EmptyBot unBot){
+    /**
+     * Constructeur initialisant l'objet Repliquant de cette classe
+     * @param unBot  
+     */
+    public Behavior(Repliquant unBot){
         this.unBot = unBot;
     }
     
-    public EmptyBot getBot(){
+    /**
+     * Getter de la classe
+     * @return l'objet Repliquant de la classe 
+     */
+    public Repliquant getBot(){
         return this.unBot;
     }
     
+    /**
+     * Fonction contenant les actions qu'effectuera le bot tant qu'il sera dans
+     * cet état
+     */
     public abstract void performed();
 }

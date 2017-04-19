@@ -40,7 +40,7 @@ public class Collect extends Behavior{
     NavPoints nav;
     Map<UT2004ItemType, Double> groupPriority; 
     
-    public Collect(EmptyBot unBot) {
+    public Collect(Repliquant unBot) {
         super(unBot);
     }
 
@@ -57,7 +57,7 @@ public class Collect extends Behavior{
         initVars();
         if(! navigation.isNavigating()){ 
             Item selectedItem = null;
-            updateGroupPriority();
+            //updateGroupPriority();
             if(! info.isHealthy() && selectedItem == null){
                 selectedItem = items.getPathNearestSpawnedItem(ItemType.Category.HEALTH);
             }

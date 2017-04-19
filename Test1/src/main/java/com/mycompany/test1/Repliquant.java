@@ -1,7 +1,6 @@
 package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
-import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.bot.params.UT2004BotParameters;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
@@ -14,7 +13,7 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerK
 import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
 import cz.cuni.amis.utils.exception.PogamutException;
 
-public class EmptyBot extends UT2004BotModuleController {
+public class Repliquant extends UT2004BotModuleController {
 
     Behavior test;
     Pursue pursue = new Pursue(this);
@@ -138,7 +137,7 @@ public class EmptyBot extends UT2004BotModuleController {
     
     public static void main(String args[]) throws PogamutException {
         //new UT2004BotRunner(EmptyBot.class, "ImABot").setMain(true).startAgent();
-        UT2004BotRunner unBot = new UT2004BotRunner(EmptyBot.class);
+        UT2004BotRunner unBot = new UT2004BotRunner(Repliquant.class);
         UT2004BotParameters unParamDeBot1 = new UT2004BotParameters();
         UT2004BotParameters unParamDeBot2 = new UT2004BotParameters();
         unBot.setMain(true).startAgents(unParamDeBot1);
