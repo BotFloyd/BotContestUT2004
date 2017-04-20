@@ -16,7 +16,6 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.InitedM
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerKilled;
 import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
-import cz.cuni.amis.pogamut.ut2004.utils.UnrealUtils;
 import cz.cuni.amis.utils.exception.PogamutException;
 import cz.cuni.amis.utils.flag.FlagListener;
 import javax.vecmath.Vector3d;
@@ -74,6 +73,9 @@ public class Repliquant extends UT2004BotModuleController {
                 target = players.getNearestVisibleEnemy();
             }
             now = engage;
+        } else if (target == null && senses.isBeingDamaged()){
+            body.getCommunication().sendGlobalTextMessage("I'm being damaged");
+            now = defense;
         } else if(target != null && weaponry.hasLoadedRangedWeapon()){
             body.getCommunication().sendGlobalTextMessage("I follow you");
             now = pursue;
@@ -85,7 +87,7 @@ public class Repliquant extends UT2004BotModuleController {
             now = collect;
         }
         //if (now.equals(before)) {
-            defense.performed();
+            now.performed();
           //  before = now;
         //}
         /*
