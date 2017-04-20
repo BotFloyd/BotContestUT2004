@@ -20,7 +20,7 @@ package com.mycompany.test1;
 /**
  * Classe mère des états, ne peut être instanciée. Behavior est composée d'un
  * objet Repliquant, accessible via getBot() ainsi que d'une fonction abstraite
- * performed()
+ * performs()
  * @author flori
  */
 public abstract class Behavior {
