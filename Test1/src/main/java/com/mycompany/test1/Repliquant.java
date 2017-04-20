@@ -116,21 +116,23 @@ public class Repliquant extends UT2004BotModuleController {
         }
                 */
     }
-
+    
     private void cheatArme(){
-               
-    	if (!weaponry.hasWeapon(UT2004ItemType.SHOCK_RIFLE)) {
+        UT2004ItemType arme = UT2004ItemType.LIGHTNING_GUN;
+        UT2004ItemType munition = UT2004ItemType.LIGHTNING_GUN_AMMO;
+        
+    	if (!weaponry.hasWeapon(arme)) {
     		log.info("Getting WEAPON");
-    		getAct().act(new AddInventory().setType(UT2004ItemType.SHOCK_RIFLE.getName()));
+    		getAct().act(new AddInventory().setType(arme.getName()));
     	}
 
-    	if (!weaponry.hasLoadedWeapon(UT2004ItemType.SHOCK_RIFLE)) {
+    	if (!weaponry.hasLoadedWeapon(arme)) {
     		log.info("Getting AMMO");
-    		getAct().act(new AddInventory().setType(UT2004ItemType.SHOCK_RIFLE_AMMO.getName()));
+    		getAct().act(new AddInventory().setType(munition.getName()));
     	}
 
-    	if (weaponry.getCurrentWeapon().getType() != UT2004ItemType.SHOCK_RIFLE) {
-    		weaponry.changeWeapon(UT2004ItemType.SHOCK_RIFLE);
+    	if (weaponry.getCurrentWeapon().getType() != arme) {
+    		weaponry.changeWeapon(arme);
     	}
     }
 
