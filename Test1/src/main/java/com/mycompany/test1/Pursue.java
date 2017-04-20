@@ -30,7 +30,7 @@ public class Pursue extends Behavior{
     }
     
     @Override
-    public void performed() {
+    public void performs() {
         Player pursued = getBot().getTarget();
         
         getBot().getNavigation().navigate(pursued);

@@ -47,5 +47,5 @@ public abstract class Behavior {
      * Fonction contenant les actions qu'effectuera le bot tant qu'il sera dans
      * cet état
      */
-    public abstract void performed();
+    public abstract void performs();
 }

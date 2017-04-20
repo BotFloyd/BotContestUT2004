@@ -57,7 +57,7 @@ public class Engage extends Behavior {
     }
     
     @Override
-    public void performed () {
+    public void performs () {
         initVars();
         double distance = 0;
         boolean choix = false;

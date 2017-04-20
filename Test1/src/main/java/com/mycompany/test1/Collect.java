@@ -53,7 +53,7 @@ public class Collect extends Behavior{
     }
     
     @Override
-    public void performed() {
+    public void performs() {
         initVars();
         if(! navigation.isNavigating()){ 
             Item selectedItem = null;

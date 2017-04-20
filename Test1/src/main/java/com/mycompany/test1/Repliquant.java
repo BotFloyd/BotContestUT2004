@@ -86,35 +86,7 @@ public class Repliquant extends UT2004BotModuleController {
             body.getCommunication().sendGlobalTextMessage("I am roaming");
             now = collect;
         }
-        //if (now.equals(before)) {
-            now.performed();
-          //  before = now;
-        //}
-        /*
-        if (players.canSeePlayers()) {
-            Player player1 = players.getNearestVisiblePlayer();
-            NavPoint recul = navigation.getNearestNavPoint(bot);
-            Location uneLocation = player1.getLocation().sub(recul.getLocation());
-            tirer();
-
-            boolean uneValeur = random.nextBoolean();
-            move.dodgeLeft(info, uneValeur);
-        }
-        else{
-            shoot.stopShooting();
-            if(!navigation.isNavigating())
-                navigation.navigate(navPoints.getRandomNavPoint());
-        }*/
-
-        /*
-        if (players.canSeePlayers()){
-            return;
-        }
-        else {
-            shoot.stopShooting();
-            return;
-        }
-                */
+        now.performs();
     }
     
     private void cheatArme(){
@@ -136,27 +108,20 @@ public class Repliquant extends UT2004BotModuleController {
     	}
     }
 
-    private void tirer() {
-        log.info("JE TIIIIIIRE BOOOOM");
-        shoot.shoot(players.getNearestVisiblePlayer());
-    }
-
     @EventListener(eventClass = PlayerKilled.class)
     public void playerKilled(PlayerKilled event) {
         if (event.getKiller().equals(info.getId())) {
-            body.getCommunication().sendGlobalTextMessage("BOOM BITCH");
+            shoot.stopShooting();
         }
     }
 
     @Override
     public void botKilled(BotKilled event) {
-            body.getCommunication().sendGlobalTextMessage("TEST");
     }
 
     @EventListener(eventClass = BotDamaged.class)
     public void botDamaged(BotDamaged event) {
         if (event.isDirectDamage()) {
-
         }
     }
 
@@ -170,7 +135,6 @@ public class Repliquant extends UT2004BotModuleController {
 
     
     public static void main(String args[]) throws PogamutException {
-        //new UT2004BotRunner(EmptyBot.class, "ImABot").setMain(true).startAgent();
         UT2004BotRunner unBot = new UT2004BotRunner(Repliquant.class);
         UT2004BotParameters unParamDeBot1 = new UT2004BotParameters();
         UT2004BotParameters unParamDeBot2 = new UT2004BotParameters();

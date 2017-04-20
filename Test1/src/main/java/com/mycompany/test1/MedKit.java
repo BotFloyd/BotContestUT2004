@@ -19,7 +19,7 @@ public class MedKit extends Behavior {
     }
     
     @Override
-    public void performed () {
+    public void performs () {
         double moreTime = getBot().getRandom().nextDouble() + 0.75;
         IUT2004Navigation navigation = getBot().getNavigation();
         LogCategory log = getBot().getLog();

@@ -24,7 +24,7 @@ public class Defense extends Behavior{
     }
     
     @Override
-    public void performed(){      
+    public void performs(){      
         initVars();
         if(! players.canSeeEnemies()){
             move.turnVertical(180);
