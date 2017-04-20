@@ -18,6 +18,7 @@ public class MedKit extends Behavior {
         super(bot);
     }
     
+    @Override
     public void performed () {
         double moreTime = getBot().getRandom().nextDouble() + 0.75;
         IUT2004Navigation navigation = getBot().getNavigation();
