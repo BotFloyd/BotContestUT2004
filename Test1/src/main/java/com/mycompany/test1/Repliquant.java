@@ -33,18 +33,21 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
-        final int rayLength = (int) (UnrealUtils.CHARACTER_COLLISION_RADIUS * 7);
         getBot().getAct().act(new RemoveRay("All"));
-        raycasting.createRay("LEFT90",  new Vector3d(0, -1, 0), rayLength, true, false, false);
-        raycasting.createRay("RIGHT90", new Vector3d(0, 1, 0), rayLength, true, false, false);
-        raycasting.createRay("BOTTOMLEFT45",  new Vector3d(0, -1, -0.5), rayLength, true, false, false);
-        raycasting.createRay("BOTTOMRIGHT45", new Vector3d(0, 1, -0.5), rayLength, true, false, false);
+        raycasting.createRay("LEFT90",  new Vector3d(0, -1, 0), 175, true, false, false);
+        raycasting.createRay("RIGHT90", new Vector3d(0, 1, 0), 175, true, false, false);
+        raycasting.createRay("BOTTOMLEFT45",  new Vector3d(0, -1, -0.4), 250, true, false, false);
+        raycasting.createRay("BOTTOMRIGHT45", new Vector3d(0, 1, -0.4), 250, true, false, false);
+        raycasting.createRay("BOTTOMLEFT",  new Vector3d(0, -1, -0.1), 500, true, false, false);
+        raycasting.createRay("BOTTOMRIGHT", new Vector3d(0, 1, -0.1), 500, true, false, false);
         raycasting.getAllRaysInitialized().addListener(new FlagListener<Boolean>() {
             public void flagChanged(Boolean changedValue) {
                 engage.setRayLeft(raycasting.getRay("LEFT90"));
                 engage.setRayRight(raycasting.getRay("RIGHT90"));
                 engage.setRayBottomLeft(raycasting.getRay("BOTTOMLEFT45"));
                 engage.setRayBottomRight(raycasting.getRay("BOTTOMRIGHT45"));
+                engage.setRayBottomLeft2(raycasting.getRay("BOTTOMLEFT"));
+                engage.setRayBottomRight2(raycasting.getRay("BOTTOMRIGHT"));
             }
         });
         raycasting.endRayInitSequence();
@@ -71,7 +74,6 @@ public class Repliquant extends UT2004BotModuleController {
                 target = players.getNearestVisibleEnemy();
             }
             now = engage;
-            body.getCommunication().sendGlobalTextMessage("I see you");
         } else if(target != null && weaponry.hasLoadedRangedWeapon()){
             body.getCommunication().sendGlobalTextMessage("I follow you");
             now = pursue;
