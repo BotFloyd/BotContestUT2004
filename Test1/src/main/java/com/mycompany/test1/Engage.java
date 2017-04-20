@@ -16,7 +16,7 @@ public class Engage extends Behavior {
     AdvancedLocomotion move;
     Location location, alea;
     Raycasting raycasting;
-    AutoTraceRay right, left, bottomLeft, bottomRight;
+    AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
 
     public Engage (Repliquant bot) {
         super(bot);
@@ -36,6 +36,14 @@ public class Engage extends Behavior {
     
     public void setRayBottomRight(AutoTraceRay ray) {
         this.bottomRight = ray;
+    }     
+    
+    public void setRayBottomLeft2(AutoTraceRay ray) {
+        this.bottomLeft2 = ray;
+    }
+    
+    public void setRayBottomRight2(AutoTraceRay ray) {
+        this.bottomRight2 = ray;
     }
      
     public void initVars () {
@@ -63,7 +71,7 @@ public class Engage extends Behavior {
                 } while (!choix);
             }
             //alea = new Location(location.x + distance / 1000 + random.nextDouble() * 10, location.y + distance / 1000 + random.nextDouble() * 10, location.z + distance / 1000 + random.nextDouble() * 10);
-            //shoot.shoot(location);
+            shoot.shoot(location);
         }
     }
         
@@ -71,21 +79,28 @@ public class Engage extends Behavior {
             int action = random.nextInt(99);
             boolean result = false;
             getBot().getConfig().setSpeedMultiplier(0.8f);
-            navigation.stopNavigation();
+            navigation.stopNavigation();      
+            getBot().getLog().info("test left : " + bottomLeft.isResult());
+            getBot().getLog().info("test left 2 : " + !left.isResult());
+            getBot().getLog().info("test right : " + bottomRight.isResult());
+            getBot().getLog().info("test right 2 : " + !right.isResult());
             if (action < 2 || action > 98)
                 move.jump();
-            else if ((action >= 2 && action <= 5) || (action >= 76 && action <= 79))
-                move.doubleJump();
             if (!left.isResult() && bottomLeft.isResult() && action > 40) {
-                move.strafeLeft(500, location);
+                move.strafeLeft(200, location);
                 result = true;
+                if ((action < 2 || action > 98) && bottomLeft2.isResult())
+                    move.jump();
             }
             else if (!right.isResult() && bottomRight.isResult() && action < 60) {
-                move.strafeRight(500, location);
+                move.strafeRight(200, location);
                 result = true;
+                if ((action < 2 || action > 98) && bottomRight2.isResult())
+                    move.jump();
             }
             else if (action >= 40 && action <= 60)
                 result = true;
+
             getBot().getConfig().setSpeedMultiplier(1.0f);
             return (result);
         }
