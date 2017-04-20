@@ -29,7 +29,7 @@ public class Repliquant extends UT2004BotModuleController {
     Collect collect = new Collect(this);
     Engage engage = new Engage(this);
     Player target;
-    
+
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
         final int rayLength = (int) (UnrealUtils.CHARACTER_COLLISION_RADIUS * 7);
@@ -49,7 +49,7 @@ public class Repliquant extends UT2004BotModuleController {
         raycasting.endRayInitSequence();
         getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
     }
-    
+ 
     @Override
     public Initialize getInitializeCommand() {
     	// uncomment to have the bot less skill (make him miss occasionally)
@@ -61,7 +61,7 @@ public class Repliquant extends UT2004BotModuleController {
     	//return super.getInitializeCommand();
         // 
     }
-    
+
     @Override
     public void logic() throws PogamutException {
         cheatArme();
@@ -91,7 +91,7 @@ public class Repliquant extends UT2004BotModuleController {
             NavPoint recul = navigation.getNearestNavPoint(bot);
             Location uneLocation = player1.getLocation().sub(recul.getLocation());
             tirer();
-            
+
             boolean uneValeur = random.nextBoolean();
             move.dodgeLeft(info, uneValeur);
         }
@@ -100,7 +100,7 @@ public class Repliquant extends UT2004BotModuleController {
             if(!navigation.isNavigating())
                 navigation.navigate(navPoints.getRandomNavPoint());
         }*/
-     
+
         /*
         if (players.canSeePlayers()){
             return;
@@ -118,12 +118,12 @@ public class Repliquant extends UT2004BotModuleController {
     		log.info("Getting WEAPON");
     		getAct().act(new AddInventory().setType(UT2004ItemType.SHOCK_RIFLE.getName()));
     	}
-    	
+
     	if (!weaponry.hasLoadedWeapon(UT2004ItemType.SHOCK_RIFLE)) {
     		log.info("Getting AMMO");
     		getAct().act(new AddInventory().setType(UT2004ItemType.SHOCK_RIFLE_AMMO.getName()));
     	}
-    	
+
     	if (weaponry.getCurrentWeapon().getType() != UT2004ItemType.SHOCK_RIFLE) {
     		weaponry.changeWeapon(UT2004ItemType.SHOCK_RIFLE);
     	}
@@ -133,30 +133,30 @@ public class Repliquant extends UT2004BotModuleController {
         log.info("JE TIIIIIIRE BOOOOM");
         shoot.shoot(players.getNearestVisiblePlayer());
     }
-    
+
     @EventListener(eventClass = PlayerKilled.class)
     public void playerKilled(PlayerKilled event) {
         if (event.getKiller().equals(info.getId())) {
             body.getCommunication().sendGlobalTextMessage("BOOM BITCH");
         }
     }
-    
+
     @Override
     public void botKilled(BotKilled event) {
             body.getCommunication().sendGlobalTextMessage("TEST");
     }
-    
+
     @EventListener(eventClass = BotDamaged.class)
     public void botDamaged(BotDamaged event) {
         if (event.isDirectDamage()) {
-            
+
         }
     }
-    
+
     public Player getTarget(){
         return target;
     }
-    
+
     public void setTarget(Player target){
         this.target = target;
     }
@@ -169,5 +169,5 @@ public class Repliquant extends UT2004BotModuleController {
         UT2004BotParameters unParamDeBot2 = new UT2004BotParameters();
         unBot.setMain(true).startAgents(unParamDeBot1);
     }
-    
+
 }
