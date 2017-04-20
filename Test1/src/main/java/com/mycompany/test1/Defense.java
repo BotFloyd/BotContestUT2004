@@ -1,8 +1,11 @@
 package com.mycompany.test1;
 
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Players;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
+import java.util.Random;
 
 
 
@@ -11,6 +14,8 @@ public class Defense extends Behavior{
     IUT2004Navigation navigation;
     Players players;
     AdvancedLocomotion move;
+    AgentInfo info;
+    Random random;
     
     public Defense(Repliquant bot){
         super(bot);
@@ -19,33 +24,21 @@ public class Defense extends Behavior{
     @Override
     public void performed(){      
         initVars();
-           /*
-        Location ennemiLocation = getBot().
-            getBot().getLog().info("Gauche" + ennemiLocation);
-        Location recul = getBot().getNavigation().getNearestNavPoint(getBot().getBot()).getLocation();
-            getBot().getLog().info("Gauche" + recul);
-        Location uneLocation = ennemiLocation.sub(recul);
-            getBot().getLog().info("Gauche" + uneLocation);
-        */
-        navigation.stopNavigation();
-        move.turnVertical(180);
-        
-        move.doubleJump();
-        //Location uneLocation = getBot().getInfo().getLocation();
-        //getBot().getLog().log(Level.INFO, "Gauche{0} ", uneLocation);
-        if(! players.canSeeEnemies())
+        if(! players.canSeeEnemies()){
             move.turnVertical(180);
-            
-        //UnrealId locationEnnemi = getBot().getSenses().getNoiseSource();
-            //getBot().getLog().info("Gauche" + locationEnnemi);
-              
+        } else {
+            Player opponent = info.getNearestVisiblePlayer();
+            String weapOpponent = opponent.getWeapon();
+        }
     }
     
-        private void initVars(){
-            navigation = getBot().getNavigation();
-            players = getBot().getPlayers();
-            move = getBot().getMove();
-        }
+    private void initVars(){
+        navigation = getBot().getNavigation();
+        players = getBot().getPlayers();
+        move = getBot().getMove();
+        info = getBot().getInfo();
+        random = getBot().getRandom();
+    }
     
     /*
     private void dodge() {

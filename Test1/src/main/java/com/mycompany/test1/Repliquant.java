@@ -28,6 +28,7 @@ public class Repliquant extends UT2004BotModuleController {
     MedKit medkit = new MedKit(this);
     Collect collect = new Collect(this);
     Engage engage = new Engage(this);
+    Defense defense = new Defense(this);
     Player target;
 
     @Override
@@ -82,7 +83,7 @@ public class Repliquant extends UT2004BotModuleController {
             now = collect;
         }
         //if (now.equals(before)) {
-            now.performed();
+            defense.performed();
           //  before = now;
         //}
         /*
