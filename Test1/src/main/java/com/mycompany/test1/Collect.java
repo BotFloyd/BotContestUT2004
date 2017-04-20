@@ -10,7 +10,6 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class Collect extends Behavior{
 
@@ -35,7 +34,7 @@ public class Collect extends Behavior{
     }
     
     @Override
-    public void performed() {
+    public void performs() {
         initVars();
         if(! navigation.isNavigating()){ 
             Item selectedItem = null;
