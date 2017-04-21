@@ -14,7 +14,7 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Incomin
 import java.util.Random;
 
 public class Engage extends Behavior {
-    
+
     IUT2004Navigation navigation;
     ImprovedShooting shoot;
     Random random;
@@ -25,35 +25,35 @@ public class Engage extends Behavior {
     AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
     WeaponPrefs weaponPrefs;
 
-    public Engage (Repliquant bot) {
+    public Engage(Repliquant bot) {
         super(bot);
     }
-    
+
     public void setRayRight(AutoTraceRay ray) {
         this.right = ray;
     }
-    
+
     public void setRayLeft(AutoTraceRay ray) {
         this.left = ray;
     }
-     
+
     public void setRayBottomLeft(AutoTraceRay ray) {
         this.bottomLeft = ray;
     }
-    
+
     public void setRayBottomRight(AutoTraceRay ray) {
         this.bottomRight = ray;
-    }     
-    
+    }
+
     public void setRayBottomLeft2(AutoTraceRay ray) {
         this.bottomLeft2 = ray;
     }
-    
+
     public void setRayBottomRight2(AutoTraceRay ray) {
         this.bottomRight2 = ray;
     }
-     
-    public void initVars () {
+
+    public void initVars() {
         Repliquant bot = getBot();
         navigation = bot.getNavigation();
         shoot = bot.getShoot();
@@ -64,9 +64,9 @@ public class Engage extends Behavior {
         weaponPrefs = bot.getWeaponPrefs();
         senses = bot.getSenses();
     }
-    
+
     @Override
-    public void performs () {
+    public void performs() {
         initVars();
         double distance;
         boolean choix;
@@ -86,38 +86,43 @@ public class Engage extends Behavior {
                 shoot.shootSecondary(alea);
                 if (senses.seeIncomingProjectile()) {
                     proj = senses.getLastIncomingProjectile();
-                    if (proj.getType().equals("XWeapons.ShockProjectile"))
+                    if (proj.getType().equals("XWeapons.ShockProjectile")) {
                         shoot.shootPrimary(proj.getLocation());
+                    }
                 }
-            }
-            else
+            } else {
                 shoot.shoot(weaponPrefs, alea);
+            }
+        } else {
+            shoot.stopShooting();
         }
     }
-        
-    private boolean choixAction () {
+
+    private boolean choixAction() {
         Repliquant bot = getBot();
         int action = random.nextInt(100);
         boolean result = false;
         bot.getConfig().setSpeedMultiplier(0.7f);
-        navigation.stopNavigation();      
-        if (action < 2 || action > 98)
+        navigation.stopNavigation();
+        if (action < 2 || action > 98) {
             move.jump();
+        }
         if (!left.isResult() && bottomLeft.isResult() && action > 40) {
             move.strafeLeft(200, location);
             result = true;
-            if ((action < 2 || action > 98) && bottomLeft2.isResult())
+            if ((action < 2 || action > 98) && bottomLeft2.isResult()) {
                 move.jump();
-        }
-        else if (!right.isResult() && bottomRight.isResult() && action < 60) {
+            }
+        } else if (!right.isResult() && bottomRight.isResult() && action < 60) {
             move.strafeRight(200, location);
             result = true;
-            if ((action < 2 || action > 98) && bottomRight2.isResult())
+            if ((action < 2 || action > 98) && bottomRight2.isResult()) {
                 move.jump();
-        }
-        else if (action >= 40 && action <= 60)
+            }
+        } else if (action >= 40 && action <= 60) {
             result = true;
+        }
         bot.getConfig().setSpeedMultiplier(1.0f);
         return (result);
     }
- }
+}
