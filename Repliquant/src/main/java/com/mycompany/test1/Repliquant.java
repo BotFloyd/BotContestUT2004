@@ -3,7 +3,6 @@ package com.mycompany.test1;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
-import cz.cuni.amis.pogamut.ut2004.bot.params.UT2004BotParameters;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.AddInventory;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Configuration;
@@ -24,7 +23,6 @@ import javax.vecmath.Vector3d;
 public class Repliquant extends UT2004BotModuleController {
 
     Behavior now;
-    Parameters params = new Parameters();
     Pursue pursue = new Pursue(this);
     MedKit medkit = new MedKit(this);
     Collect collect = new Collect(this);
@@ -57,7 +55,7 @@ public class Repliquant extends UT2004BotModuleController {
     
     @Override
     public Initialize getInitializeCommand() {
-    	return params.initialize();
+        return (new Parameters().setParams(bot.getParams()).initialize());
     }
     
     @Override
@@ -175,11 +173,9 @@ public class Repliquant extends UT2004BotModuleController {
     public void setTarget(Player target){
         this.target = target;
     }
-
     
     public static void main(String args[]) throws PogamutException {
-        UT2004BotRunner unBot = new UT2004BotRunner(Repliquant.class);
-        unBot.setMain(true).startAgents(
+        new UT2004BotRunner <UT2004Bot, Parameters> (Repliquant.class).setMain(true).startAgents(
                 new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
                 new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }

@@ -5,9 +5,15 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Initialize;
 
 public class Parameters extends UT2004BotParameters {
     
+    UT2004BotParameters params;
     private String botSkin;
     private String name;
     private int skillLevel;
+    
+    public Parameters setParams(UT2004BotParameters params) {
+        this.params = params;
+        return this;
+    }
     
     public String getBotSkin() {
         return botSkin;
@@ -37,7 +43,8 @@ public class Parameters extends UT2004BotParameters {
     }
     
     public Initialize initialize () {
-        return new Initialize().setName(getName()).setSkin(getBotSkin()).setDesiredSkill(getSkillLevel()); 
+        Parameters parameters = (Parameters) params;
+        return new Initialize().setName(parameters.getName()).setSkin(parameters.getBotSkin()).setDesiredSkill(parameters.getSkillLevel()); 
     }
-    
+ 
 }
