@@ -73,38 +73,33 @@ public class Engage extends Behavior {
                     choix = choixAction();
                 } while (!choix);
             }
-            //alea = new Location(location.x + distance / 1000 + random.nextDouble() * 10, location.y + distance / 1000 + random.nextDouble() * 10, location.z + distance / 1000 + random.nextDouble() * 10);
-            shoot.shoot(weaponPrefs, location);
+            alea = new Location(location.x + distance / 5000 + random.nextDouble(), location.y + distance / 5000 + random.nextDouble(), location.z + distance / 5000 + random.nextDouble());
+            shoot.shoot(weaponPrefs, alea);
         }
     }
         
-        private boolean choixAction () {
-            int action = random.nextInt(99);
-            boolean result = false;
-            getBot().getConfig().setSpeedMultiplier(0.8f);
-            navigation.stopNavigation();      
-            getBot().getLog().info("test left : " + bottomLeft.isResult());
-            getBot().getLog().info("test left 2 : " + !left.isResult());
-            getBot().getLog().info("test right : " + bottomRight.isResult());
-            getBot().getLog().info("test right 2 : " + !right.isResult());
-            if (action < 2 || action > 98)
+    private boolean choixAction () {
+        int action = random.nextInt(99);
+        boolean result = false;
+        getBot().getConfig().setSpeedMultiplier(0.8f);
+        navigation.stopNavigation();      
+        if (action < 2 || action > 98)
+            move.jump();
+        if (!left.isResult() && bottomLeft.isResult() && action > 40) {
+            move.strafeLeft(200, location);
+            result = true;
+            if ((action < 2 || action > 98) && bottomLeft2.isResult())
                 move.jump();
-            if (!left.isResult() && bottomLeft.isResult() && action > 40) {
-                move.strafeLeft(200, location);
-                result = true;
-                if ((action < 2 || action > 98) && bottomLeft2.isResult())
-                    move.jump();
-            }
-            else if (!right.isResult() && bottomRight.isResult() && action < 60) {
-                move.strafeRight(200, location);
-                result = true;
-                if ((action < 2 || action > 98) && bottomRight2.isResult())
-                    move.jump();
-            }
-            else if (action >= 40 && action <= 60)
-                result = true;
-
-            getBot().getConfig().setSpeedMultiplier(1.0f);
-            return (result);
         }
+        else if (!right.isResult() && bottomRight.isResult() && action < 60) {
+            move.strafeRight(200, location);
+            result = true;
+            if ((action < 2 || action > 98) && bottomRight2.isResult())
+                move.jump();
+        }
+        else if (action >= 40 && action <= 60)
+            result = true;
+        getBot().getConfig().setSpeedMultiplier(1.0f);
+        return (result);
+    }
  }

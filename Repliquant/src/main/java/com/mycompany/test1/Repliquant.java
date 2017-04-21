@@ -23,7 +23,8 @@ import javax.vecmath.Vector3d;
 
 public class Repliquant extends UT2004BotModuleController {
 
-    Behavior now, before = null;
+    Behavior now;
+    Parameters params = new Parameters();
     Pursue pursue = new Pursue(this);
     MedKit medkit = new MedKit(this);
     Collect collect = new Collect(this);
@@ -53,17 +54,10 @@ public class Repliquant extends UT2004BotModuleController {
         raycasting.endRayInitSequence();
         getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
     }
- 
+    
     @Override
     public Initialize getInitializeCommand() {
-    	// uncomment to have the bot less skill (make him miss occasionally)
-    	Initialize uneVar = super.getInitializeCommand();
-        uneVar.setDesiredSkill(2);
-        uneVar.setName("Tamere");
-        uneVar.setSkin("HumanMaleA.MercMaleA");
-        return uneVar;
-    	//return super.getInitializeCommand();
-        // 
+    	return params.initialize();
     }
     
     @Override
@@ -112,11 +106,11 @@ public class Repliquant extends UT2004BotModuleController {
         weaponPrefs.newPrefsRange(100000)
                 .add(UT2004ItemType.SNIPER_RIFLE, true)
                 .add(UT2004ItemType.LIGHTNING_GUN, true);
+        shoot.setChangeWeaponCooldown(5000);
     }
 
     @Override
     public void logic() throws PogamutException {
-        cheatArme();
         if(players.canSeeEnemies()){
             if(target == null || !target.isVisible()){
                 target = players.getNearestVisibleEnemy();
@@ -185,9 +179,9 @@ public class Repliquant extends UT2004BotModuleController {
     
     public static void main(String args[]) throws PogamutException {
         UT2004BotRunner unBot = new UT2004BotRunner(Repliquant.class);
-        UT2004BotParameters unParamDeBot1 = new UT2004BotParameters();
-        UT2004BotParameters unParamDeBot2 = new UT2004BotParameters();
-        unBot.setMain(true).startAgents(unParamDeBot1);
+        unBot.setMain(true).startAgents(
+                new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }
 
 }
