@@ -1,6 +1,7 @@
 package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
+import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.bot.params.UT2004BotParameters;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
@@ -63,6 +64,54 @@ public class Repliquant extends UT2004BotModuleController {
         return uneVar;
     	//return super.getInitializeCommand();
         // 
+    }
+    
+    @Override
+    public void prepareBot(UT2004Bot bot) {
+        
+        // FIRST we DEFINE GENERAL WEAPON PREFERENCES
+        weaponPrefs.addGeneralPref(UT2004ItemType.ROCKET_LAUNCHER, false);
+        weaponPrefs.addGeneralPref(UT2004ItemType.ROCKET_LAUNCHER, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.SNIPER_RIFLE, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.FLAK_CANNON, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.FLAK_CANNON, false);
+        weaponPrefs.addGeneralPref(UT2004ItemType.MINIGUN, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.MINIGUN, false);
+        weaponPrefs.addGeneralPref(UT2004ItemType.LIGHTNING_GUN, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.SHOCK_RIFLE, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.SHOCK_RIFLE, false);
+        weaponPrefs.addGeneralPref(UT2004ItemType.LINK_GUN, false);
+        weaponPrefs.addGeneralPref(UT2004ItemType.LINK_GUN, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.BIO_RIFLE, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.ASSAULT_RIFLE, true);
+		
+        // AND THEN RANGED
+        weaponPrefs.newPrefsRange(80)
+                .add(UT2004ItemType.SHIELD_GUN, true);
+        
+        weaponPrefs.newPrefsRange(600)
+                .add(UT2004ItemType.LINK_GUN, false)
+                .add(UT2004ItemType.BIO_RIFLE, false)
+                .add(UT2004ItemType.ASSAULT_RIFLE, false);
+
+        weaponPrefs.newPrefsRange(1000)
+                .add(UT2004ItemType.ROCKET_LAUNCHER, true)
+                .add(UT2004ItemType.FLAK_CANNON, false)
+                .add(UT2004ItemType.MINIGUN, false)
+                .add(UT2004ItemType.LINK_GUN, true)
+                .add(UT2004ItemType.ASSAULT_RIFLE, true); 
+        
+        weaponPrefs.newPrefsRange(1500)
+                .add(UT2004ItemType.MINIGUN, false)
+                .add(UT2004ItemType.SHOCK_RIFLE, false);
+
+        weaponPrefs.newPrefsRange(4000)
+                .add(UT2004ItemType.SHOCK_RIFLE, true)
+                .add(UT2004ItemType.ROCKET_LAUNCHER, false);
+
+        weaponPrefs.newPrefsRange(100000)
+                .add(UT2004ItemType.SNIPER_RIFLE, true)
+                .add(UT2004ItemType.LIGHTNING_GUN, true);
     }
 
     @Override

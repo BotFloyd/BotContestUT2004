@@ -2,6 +2,7 @@ package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Raycasting;
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPrefs;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
@@ -17,6 +18,7 @@ public class Engage extends Behavior {
     Location location, alea;
     Raycasting raycasting;
     AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
+    WeaponPrefs weaponPrefs;
 
     public Engage (Repliquant bot) {
         super(bot);
@@ -53,6 +55,7 @@ public class Engage extends Behavior {
         move = getBot().getMove();
         location = getBot().getPlayers().getNearestVisibleEnemy().getLocation();
         raycasting = getBot().getRaycasting();
+        weaponPrefs = getBot().getWeaponPrefs();
         
     }
     
@@ -71,7 +74,7 @@ public class Engage extends Behavior {
                 } while (!choix);
             }
             //alea = new Location(location.x + distance / 1000 + random.nextDouble() * 10, location.y + distance / 1000 + random.nextDouble() * 10, location.z + distance / 1000 + random.nextDouble() * 10);
-            shoot.shoot(location);
+            shoot.shoot(weaponPrefs, location);
         }
     }
         
