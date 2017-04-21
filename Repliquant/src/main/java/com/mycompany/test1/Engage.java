@@ -2,11 +2,15 @@ package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Raycasting;
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPrefs;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
+import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.AutoTraceRay;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.IncomingProjectile;
 import java.util.Random;
 
 public class Engage extends Behavior {
@@ -17,6 +21,7 @@ public class Engage extends Behavior {
     AdvancedLocomotion move;
     Location location, alea;
     Raycasting raycasting;
+    Senses senses;
     AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
     WeaponPrefs weaponPrefs;
 
@@ -49,23 +54,26 @@ public class Engage extends Behavior {
     }
      
     public void initVars () {
-        navigation = getBot().getNavigation();
-        shoot = getBot().getShoot();
-        random = getBot().getRandom();
-        move = getBot().getMove();
-        location = getBot().getPlayers().getNearestVisibleEnemy().getLocation();
-        raycasting = getBot().getRaycasting();
-        weaponPrefs = getBot().getWeaponPrefs();
-        
+        Repliquant bot = getBot();
+        navigation = bot.getNavigation();
+        shoot = bot.getShoot();
+        random = bot.getRandom();
+        move = bot.getMove();
+        location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
+        raycasting = bot.getRaycasting();
+        weaponPrefs = bot.getWeaponPrefs();
+        senses = bot.getSenses();
     }
     
     @Override
     public void performs () {
         initVars();
-        double distance = 0;
-        boolean choix = false;
+        double distance;
+        boolean choix;
+        Repliquant bot = getBot();
+        IncomingProjectile proj;
         if (location != null) {
-            distance = location.getDistance(getBot().getBot().getLocation());
+            distance = location.getDistance(bot.getBot().getLocation());
             if (distance > 700) {
                 navigation.navigate(location);
             } else {
@@ -74,14 +82,24 @@ public class Engage extends Behavior {
                 } while (!choix);
             }
             alea = new Location(location.x + distance / 5000 + random.nextDouble(), location.y + distance / 5000 + random.nextDouble(), location.z + distance / 5000 + random.nextDouble());
-            shoot.shoot(weaponPrefs, alea);
+            if (bot.getInfo().getCurrentWeaponName().equals("ShockRifle") && (random.nextInt(10) % 3 == 0)) {
+                shoot.shootSecondary(alea);
+                if (senses.seeIncomingProjectile()) {
+                    proj = senses.getLastIncomingProjectile();
+                    if (proj.getType().equals("XWeapons.ShockProjectile"))
+                        shoot.shootPrimary(proj.getLocation());
+                }
+            }
+            else
+                shoot.shoot(weaponPrefs, alea);
         }
     }
         
     private boolean choixAction () {
-        int action = random.nextInt(99);
+        Repliquant bot = getBot();
+        int action = random.nextInt(100);
         boolean result = false;
-        getBot().getConfig().setSpeedMultiplier(0.8f);
+        bot.getConfig().setSpeedMultiplier(0.7f);
         navigation.stopNavigation();      
         if (action < 2 || action > 98)
             move.jump();
@@ -99,7 +117,7 @@ public class Engage extends Behavior {
         }
         else if (action >= 40 && action <= 60)
             result = true;
-        getBot().getConfig().setSpeedMultiplier(1.0f);
+        bot.getConfig().setSpeedMultiplier(1.0f);
         return (result);
     }
  }

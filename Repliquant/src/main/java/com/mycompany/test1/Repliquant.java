@@ -109,6 +109,7 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void logic() throws PogamutException {
+        //cheatArme();
         if(players.canSeeEnemies()){
             if(target == null || !target.isVisible()){
                 target = players.getNearestVisibleEnemy();
@@ -131,8 +132,8 @@ public class Repliquant extends UT2004BotModuleController {
     }
     
     private void cheatArme(){
-        UT2004ItemType arme = UT2004ItemType.LIGHTNING_GUN;
-        UT2004ItemType munition = UT2004ItemType.LIGHTNING_GUN_AMMO;
+        UT2004ItemType arme = UT2004ItemType.SHOCK_RIFLE;
+        UT2004ItemType munition = UT2004ItemType.SHOCK_RIFLE_AMMO;
         
     	if (!weaponry.hasWeapon(arme)) {
     		log.info("Getting WEAPON");
