@@ -116,7 +116,7 @@ public class Repliquant extends UT2004BotModuleController {
             }
             bot.getBotName().setInfo("ENGAGE");
             now = engage;
-        } else if (target == null && senses.seeIncomingProjectile()) {
+        } else if (target == null && (senses.seeIncomingProjectile() || senses.isBeingDamaged())) {
             bot.getBotName().setInfo("DEFENSE");
             now = defense;
         } else if (target != null && weaponry.hasLoadedRangedWeapon()) {

@@ -1,6 +1,7 @@
 package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Players;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.IncomingProjectile;
@@ -14,6 +15,7 @@ public class Defense extends Behavior{
     AdvancedLocomotion move;
     AgentInfo info;
     Senses senses;
+    Players players;
     
     public Defense(Repliquant bot){
         super(bot);
@@ -23,7 +25,9 @@ public class Defense extends Behavior{
     public void performs(){      
         initVars();
         IncomingProjectile projectile = senses.getLastIncomingProjectile();
-        if(projectile.isVisible()){
+        if(!(players.canSeeEnemies()) && !(projectile.isVisible())){
+            move.turnHorizontal(180);
+        } else if(projectile.isVisible()){
             Vector3d projectileDirection = projectile.getDirection();
             double dmgRad = projectile.getDamageRadius();
             Point3d projectilelocation = projectile.getLocation().getPoint3d();
@@ -42,6 +46,7 @@ public class Defense extends Behavior{
         info = getBot().getInfo();
         move = getBot().getMove();
         senses = getBot().getSenses();
+        players = getBot().getPlayers();
     }
     
 }
