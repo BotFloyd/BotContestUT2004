@@ -10,13 +10,12 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPrefs;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
-import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType.Category;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.SetCrouch;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.AutoTraceRay;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.IncomingProjectile;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
-import java.util.Map;
 import java.util.Random;
 
 public class Engage extends Behavior {
@@ -84,7 +83,6 @@ public class Engage extends Behavior {
         double distance;
         boolean choix;
         Repliquant bot = getBot();
-        IncomingProjectile proj;
         if (location != null) {
             if(!weaponry.hasLoadedRangedWeapon()){
                 bot.getBody().getCommunication().sendGlobalTextMessage("no weapon");
@@ -92,7 +90,13 @@ public class Engage extends Behavior {
                 return;
             }
             distance = location.getDistance(bot.getBot().getLocation());
-            if (distance > 700) {
+            if (distance > 4000 && weaponry.hasAmmoForWeapon((UT2004ItemType.LIGHTNING_GUN))){
+                shoot.changeWeapon(UT2004ItemType.LIGHTNING_GUN);
+                navigation.stopNavigation();
+                shoot.shoot(weaponPrefs, location);
+                bot.getAct().act(new SetCrouch(true));
+            }
+            else if (distance > 700) {
                 navigation.navigate(location);
             } else {
                 do {
@@ -101,13 +105,7 @@ public class Engage extends Behavior {
             }
             alea = new Location(location.x + distance / 5000 + random.nextDouble(), location.y + distance / 5000 + random.nextDouble(), location.z + distance / 5000 + random.nextDouble());
             if (bot.getInfo().getCurrentWeaponName().equals("ShockRifle") && (random.nextInt(10) % 3 == 0)) {
-                shoot.shootSecondary(alea);
-                if (senses.seeIncomingProjectile()) {
-                    proj = senses.getLastIncomingProjectile();
-                    if (proj.getType().equals("XWeapons.ShockProjectile")) {
-                        shoot.shootPrimary(proj.getLocation());
-                    }
-                }
+                shockRifle();
             } else {
                 shoot.shoot(weaponPrefs, alea);
             }
@@ -116,6 +114,17 @@ public class Engage extends Behavior {
         }
     }
 
+    private void shockRifle(){
+        IncomingProjectile proj;
+        shoot.shootSecondary(alea);
+        if (senses.seeIncomingProjectile()) {
+            proj = senses.getLastIncomingProjectile();
+            if (proj.getType().equals("XWeapons.ShockProjectile")) {
+                shoot.shootPrimary(proj.getLocation());
+            }
+        }
+    }
+    
     private boolean choixAction() {
         Repliquant bot = getBot();
         int action = random.nextInt(100);
