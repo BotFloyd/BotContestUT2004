@@ -1,6 +1,7 @@
 package com.mycompany.test1;
 
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
@@ -24,11 +25,11 @@ public class Repliquant extends UT2004BotModuleController {
 
     Behavior now;
     Pursue pursue = new Pursue(this);
-    MedKit medkit = new MedKit(this);
     Collect collect = new Collect(this);
     Engage engage = new Engage(this);
     Defense defense = new Defense(this);
     Player target;
+    private UT2004PathAutoFixer autoFixer;
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
@@ -60,6 +61,8 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void prepareBot(UT2004Bot bot) {
+        
+        autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
 
         // FIRST we DEFINE GENERAL WEAPON PREFERENCES
         weaponPrefs.addGeneralPref(UT2004ItemType.ROCKET_LAUNCHER, false);
@@ -76,24 +79,23 @@ public class Repliquant extends UT2004BotModuleController {
         weaponPrefs.addGeneralPref(UT2004ItemType.LINK_GUN, true);
         weaponPrefs.addGeneralPref(UT2004ItemType.BIO_RIFLE, true);
         weaponPrefs.addGeneralPref(UT2004ItemType.ASSAULT_RIFLE, true);
+        weaponPrefs.addGeneralPref(UT2004ItemType.ASSAULT_RIFLE, false);
 
         // AND THEN RANGED
-        weaponPrefs.newPrefsRange(80)
-                .add(UT2004ItemType.SHIELD_GUN, true);
-
         weaponPrefs.newPrefsRange(600)
                 .add(UT2004ItemType.LINK_GUN, false)
                 .add(UT2004ItemType.BIO_RIFLE, false)
-                .add(UT2004ItemType.FLAK_CANNON, false);
+                .add(UT2004ItemType.FLAK_CANNON, true);
 
         weaponPrefs.newPrefsRange(1000)
-                .add(UT2004ItemType.ROCKET_LAUNCHER, true)
-                .add(UT2004ItemType.FLAK_CANNON, false)
+                .add(UT2004ItemType.FLAK_CANNON, true)
                 .add(UT2004ItemType.MINIGUN, false)
                 .add(UT2004ItemType.LINK_GUN, true)
+                .add(UT2004ItemType.ROCKET_LAUNCHER, true)
                 .add(UT2004ItemType.ASSAULT_RIFLE, true);
 
         weaponPrefs.newPrefsRange(1500)
+                .add(UT2004ItemType.ROCKET_LAUNCHER, true)
                 .add(UT2004ItemType.MINIGUN, false)
                 .add(UT2004ItemType.SHOCK_RIFLE, false);
 
@@ -123,10 +125,6 @@ public class Repliquant extends UT2004BotModuleController {
             bot.getBotName().setInfo("PURSUE");
             shoot.stopShooting();
             now = pursue;
-        } else if (info.getHealth() < 70 && !navigation.isNavigating()) {
-            bot.getBotName().setInfo("MEDKIT");
-            shoot.stopShooting();
-            now = medkit;
         } else {
             bot.getBotName().setInfo("COLLECT");
             shoot.stopShooting();   
@@ -158,6 +156,7 @@ public class Repliquant extends UT2004BotModuleController {
     public void playerKilled(PlayerKilled event) {
         if (event.getKiller().equals(info.getId())) {
             shoot.stopShooting();
+            target = null;
         }
     }
 
@@ -167,8 +166,6 @@ public class Repliquant extends UT2004BotModuleController {
 
     @EventListener(eventClass = BotDamaged.class)
     public void botDamaged(BotDamaged event) {
-        if (event.isDirectDamage()) {
-        }
     }
 
     public Player getTarget() {

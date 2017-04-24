@@ -72,7 +72,9 @@ public class Collect extends Behavior{
     
     private void updateGroupPriority(){
         
-        groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 1.5*(199-info.getHealth())/199);
+        groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 2.0*(199-info.getHealth())/199);
+        groupPriority.put(UT2004ItemType.HEALTH_PACK, 8.0*(100-info.getHealth())/100);
+        groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 8.0*(199-info.getHealth())/199);
         groupPriority.put(UT2004ItemType.ADRENALINE_PACK, 1.0*(99-info.getAdrenaline())/99);
         groupPriority.put(UT2004ItemType.SHIELD_PACK, 5.0*(50-info.getLowArmor())/50);
         groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 8.0*(100-info.getHighArmor())/100);
