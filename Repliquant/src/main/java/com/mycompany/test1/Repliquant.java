@@ -110,13 +110,13 @@ public class Repliquant extends UT2004BotModuleController {
     @Override
     public void logic() throws PogamutException {
         //cheatArme();
-        if (players.canSeeEnemies() && weaponry.hasLoadedWeapon()) {
+        if (players.canSeeEnemies()) {
             if (target == null || !target.isVisible()) {
                 target = players.getNearestVisibleEnemy();
             }
             bot.getBotName().setInfo("ENGAGE");
             now = engage;
-        } else if (target == null && senses.isBeingDamaged()) {
+        } else if (target == null && senses.seeIncomingProjectile()) {
             bot.getBotName().setInfo("DEFENSE");
             now = defense;
         } else if (target != null && weaponry.hasLoadedRangedWeapon()) {
