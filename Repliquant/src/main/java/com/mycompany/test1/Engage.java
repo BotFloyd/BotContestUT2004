@@ -25,7 +25,6 @@ public class Engage extends Behavior {
     Random random;
     AdvancedLocomotion move;
     Location location, alea;
-    Raycasting raycasting;
     Senses senses;
     AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
     WeaponPrefs weaponPrefs;
@@ -69,7 +68,6 @@ public class Engage extends Behavior {
         move = bot.getMove();
         if(bot.getPlayers().getNearestVisibleEnemy() != null)
         location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
-        raycasting = bot.getRaycasting();
         weaponPrefs = bot.getWeaponPrefs();
         senses = bot.getSenses();
         weaponry = bot.getWeaponry();
