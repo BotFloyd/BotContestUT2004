@@ -17,7 +17,7 @@
 	<url>http://pogamut.cuni.cz/pogamut_files/latest/doc/tutorials/EmptyBotTutorial.html</url>
 
 	<properties>
-		<bot.main.class>com.mycompany.test1.Repliquant</bot.main.class>
+		<bot.main.class>com.mycompany.test1.main.Repliquant</bot.main.class>
 	</properties>
 
 	<repositories>

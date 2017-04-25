@@ -15,10 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mycompany.test1.etats.concrete;
+package com.mycompany.test1.state.concrete;
 
 import com.mycompany.test1.main.Repliquant;
-import com.mycompany.test1.etats.Behavior;
+import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 
 /**

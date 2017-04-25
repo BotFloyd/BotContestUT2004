@@ -1,11 +1,11 @@
 package com.mycompany.test1.main;
 
 import com.mycompany.test1.settings.Parameters;
-import com.mycompany.test1.etats.concrete.Pursue;
-import com.mycompany.test1.etats.concrete.Engage;
-import com.mycompany.test1.etats.concrete.Defense;
-import com.mycompany.test1.etats.concrete.Collect;
-import com.mycompany.test1.etats.Behavior;
+import com.mycompany.test1.state.concrete.Pursue;
+import com.mycompany.test1.state.concrete.Engage;
+import com.mycompany.test1.state.concrete.Defense;
+import com.mycompany.test1.state.concrete.Collect;
+import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;

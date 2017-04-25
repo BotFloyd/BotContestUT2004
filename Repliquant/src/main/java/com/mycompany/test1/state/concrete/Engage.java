@@ -1,7 +1,7 @@
-package com.mycompany.test1.etats.concrete;
+package com.mycompany.test1.state.concrete;
 
 import com.mycompany.test1.main.Repliquant;
-import com.mycompany.test1.etats.Behavior;
+import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Raycasting;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
