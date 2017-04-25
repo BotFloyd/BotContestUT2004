@@ -1,7 +1,8 @@
 package com.mycompany.test1.state.concrete;
 
-import com.mycompany.test1.main.Repliquant;
 import com.mycompany.test1.state.Behavior;
+import com.mycompany.test1.main.Repliquant;
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.AdrenalineCombo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
@@ -22,6 +23,7 @@ public class Collect extends Behavior{
     NavPoints nav;
     Map<UT2004ItemType, Double> groupPriority = new HashMap(); 
     TabooSet<Item> tabooItems;
+    AdrenalineCombo combo;
     
     public Collect(Repliquant unBot) {
         super(unBot);
@@ -33,11 +35,15 @@ public class Collect extends Behavior{
         navigation = getBot().getNavigation();
         weaponry = getBot().getWeaponry();
         nav = getBot().getNavPoints();
+        combo = getBot().getCombo();
     }
     
     @Override
     public void performs() {
         initVars();
+        if(info.getHealth() < 70 && combo.canPerformCombo()){
+            combo.performDefensive();
+        }
         if(! navigation.isNavigating()){ 
             Item selectedItem = null;
             Double highestPriority = 0.0;
@@ -77,7 +83,7 @@ public class Collect extends Behavior{
         groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 2.0*(199-info.getHealth())/199);
         groupPriority.put(UT2004ItemType.HEALTH_PACK, 8.0*(100-info.getHealth())/100);
         groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 8.0*(199-info.getHealth())/199);
-        groupPriority.put(UT2004ItemType.ADRENALINE_PACK, 1.0*(99-info.getAdrenaline())/99);
+        groupPriority.put(UT2004ItemType.ADRENALINE_PACK, 999.0*(99-info.getAdrenaline())/99);
         groupPriority.put(UT2004ItemType.SHIELD_PACK, 5.0*(50-info.getLowArmor())/50);
         groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 8.0*(100-info.getHighArmor())/100);
         
