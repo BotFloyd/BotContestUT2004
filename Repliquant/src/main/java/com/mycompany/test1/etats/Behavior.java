@@ -15,7 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.mycompany.test1;
+package com.mycompany.test1.etats;
+
+import com.mycompany.test1.main.Repliquant;
 
 /**
  * Classe mère des états, ne peut être instanciée. Behavior est composée d'un
