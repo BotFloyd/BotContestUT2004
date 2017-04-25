@@ -30,7 +30,7 @@ public class Repliquant extends UT2004BotModuleController {
     Defense defense = new Defense(this);
     Player target;
     private UT2004PathAutoFixer autoFixer;
-    int mort = 0 , kill = 0, courage;
+    int mort = 0 , kill = 0, risque;
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
@@ -156,7 +156,8 @@ public class Repliquant extends UT2004BotModuleController {
     @EventListener(eventClass = PlayerKilled.class)
     public void playerKilled(PlayerKilled event) {
         mort++;
-        body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + courage);
+        risque = mort - kill;
+        body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + risque);
         if (event.getKiller().equals(info.getId())) {
             shoot.stopShooting();
             target = null;
@@ -166,7 +167,8 @@ public class Repliquant extends UT2004BotModuleController {
     @Override
     public void botKilled(BotKilled event) {
         kill++;
-        body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + courage);
+        risque = mort - kill;
+        body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + risque);
     }
 
     @EventListener(eventClass = BotDamaged.class)
