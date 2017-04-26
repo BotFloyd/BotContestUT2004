@@ -1,6 +1,7 @@
 package com.mycompany.test1.state.concrete;
 
 import com.mycompany.test1.main.Repliquant;
+import com.mycompany.test1.settings.WeaponPreferences;
 import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Raycasting;
@@ -8,6 +9,7 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPref;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPrefs;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
@@ -29,7 +31,7 @@ public class Engage extends Behavior {
     Location location, alea;
     Senses senses;
     AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
-    WeaponPrefs weaponPrefs;
+    WeaponPreferences weaponPref;
     Weaponry weaponry;
     Items items;
     AgentInfo info;
@@ -69,8 +71,8 @@ public class Engage extends Behavior {
         random = bot.getRandom();
         move = bot.getMove();
         if(bot.getPlayers().getNearestVisibleEnemy() != null)
-        location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
-        weaponPrefs = bot.getWeaponPrefs();
+            location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
+        weaponPref = bot.getCurrentWeapon();
         senses = bot.getSenses();
         weaponry = bot.getWeaponry();
         items = bot.getItems();
@@ -93,7 +95,7 @@ public class Engage extends Behavior {
             if (distance > 4000 && weaponry.hasAmmoForWeapon((UT2004ItemType.LIGHTNING_GUN))){
                 shoot.changeWeapon(UT2004ItemType.LIGHTNING_GUN);
                 navigation.stopNavigation();
-                shoot.shoot(weaponPrefs, location);
+                shoot.shoot(new WeaponPref(weaponPref.getWeapon(), weaponPref.isUsingPrimary()), location);
                 bot.getAct().act(new SetCrouch(true));
             }
             else if (distance > 700) {
@@ -107,7 +109,7 @@ public class Engage extends Behavior {
             if (bot.getInfo().getCurrentWeaponName().equals("ShockRifle") && (random.nextInt(10) % 3 == 0)) {
                 shockRifle();
             } else {
-                shoot.shoot(weaponPrefs, alea);
+                shoot.shoot(new WeaponPref(weaponPref.getWeapon(), weaponPref.isUsingPrimary()), alea);
             }
         } else {
             shoot.stopShooting();
