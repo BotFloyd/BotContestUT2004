@@ -4,13 +4,11 @@ import com.mycompany.test1.main.Repliquant;
 import com.mycompany.test1.settings.WeaponPreferences;
 import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
-import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Raycasting;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPref;
-import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPrefs;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
@@ -30,7 +28,7 @@ public class Engage extends Behavior {
     AdvancedLocomotion move;
     Location location, alea;
     Senses senses;
-    AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2;
+    AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2, back, bottomBack;
     WeaponPreferences weaponPref;
     Weaponry weaponry;
     Items items;
@@ -63,6 +61,14 @@ public class Engage extends Behavior {
     public void setRayBottomRight2(AutoTraceRay ray) {
         this.bottomRight2 = ray;
     }
+    
+    public void setRayBack(AutoTraceRay ray) {
+        this.back = ray;
+    }
+     
+    public void setRayBottomBack(AutoTraceRay ray) {
+        this.bottomBack = ray;
+    }
 
     public void initVars() {
         Repliquant bot = getBot();
@@ -70,8 +76,7 @@ public class Engage extends Behavior {
         shoot = bot.getShoot();
         random = bot.getRandom();
         move = bot.getMove();
-        if(bot.getPlayers().getNearestVisibleEnemy() != null)
-            location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
+        location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
         weaponPref = bot.getCurrentWeapon();
         senses = bot.getSenses();
         weaponry = bot.getWeaponry();
@@ -99,7 +104,9 @@ public class Engage extends Behavior {
                 bot.getAct().act(new SetCrouch(true));
             }
             else if (distance > 700) {
-                navigation.navigate(location);
+                navigation.navigate(location);  
+            } else if (distance < 300 && !back.isResult() && !bottomBack.isResult()) {
+                    moveBackwards();
             } else {
                 do {
                     choix = choixAction();
@@ -114,6 +121,12 @@ public class Engage extends Behavior {
         } else {
             shoot.stopShooting();
         }
+    }
+    
+    private void moveBackwards () {
+        Location locationBack = bottomBack.getHitLocation();
+        if ((location != null) && !back.isResult() && !bottomBack.isResult())
+            move.strafeTo(locationBack, location);
     }
 
     private void shockRifle(){

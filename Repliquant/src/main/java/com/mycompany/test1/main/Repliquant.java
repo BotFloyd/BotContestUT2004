@@ -8,7 +8,6 @@ import com.mycompany.test1.state.concrete.Defense;
 import com.mycompany.test1.state.concrete.Collect;
 import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
-import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.ObjectClassEventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
@@ -62,6 +61,8 @@ public class Repliquant extends UT2004BotModuleController {
         raycasting.createRay("BOTTOMRIGHT45", new Vector3d(0, 1, -0.4), 250, true, false, false);
         raycasting.createRay("BOTTOMLEFT", new Vector3d(0, -1, -0.1), 500, true, false, false);
         raycasting.createRay("BOTTOMRIGHT", new Vector3d(0, 1, -0.1), 500, true, false, false);
+        raycasting.createRay("BOTTOMBACK", new Vector3d(-1, 0, -0.3), 250, false, false, false);
+        raycasting.createRay("BACK", new Vector3d(-1, 0, 0), 300, true, false, false);
         raycasting.getAllRaysInitialized().addListener(new FlagListener<Boolean>() {
             @Override
             public void flagChanged(Boolean changedValue) {
@@ -71,6 +72,8 @@ public class Repliquant extends UT2004BotModuleController {
                 engage.setRayBottomRight(raycasting.getRay("BOTTOMRIGHT45"));
                 engage.setRayBottomLeft2(raycasting.getRay("BOTTOMLEFT"));
                 engage.setRayBottomRight2(raycasting.getRay("BOTTOMRIGHT"));
+                engage.setRayBottomBack(raycasting.getRay("BOTTOMBACK"));
+                engage.setRayBack(raycasting.getRay("BACK"));
             }
         });
         raycasting.endRayInitSequence();
