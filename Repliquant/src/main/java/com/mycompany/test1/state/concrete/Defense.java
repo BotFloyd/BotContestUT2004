@@ -28,9 +28,7 @@ public class Defense extends Behavior{
         initVars();
         IncomingProjectile projectile = senses.getLastIncomingProjectile();
         if(projectile != null){
-            if(!(players.canSeeEnemies()) && !(projectile.isVisible())){
-                move.turnHorizontal(180);
-            } else if(projectile.isVisible()){
+            if(projectile.isVisible()){
                 Vector3d projectileDirection = projectile.getDirection();
                 double dmgRad = projectile.getDamageRadius();
                 Point3d projectilelocation = projectile.getLocation().getPoint3d();
@@ -43,6 +41,9 @@ public class Defense extends Behavior{
                     move.dodge(projectile.getLocation(), true);
                 }
             }
+        }
+        if(!(players.canSeeEnemies())){
+                move.turnHorizontal(180);
         }
     }
     

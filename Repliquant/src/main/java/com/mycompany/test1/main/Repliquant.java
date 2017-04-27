@@ -224,7 +224,7 @@ public class Repliquant extends UT2004BotModuleController {
         body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + risque);
     }
 
-    private void chooseWeapon() {
+    public void chooseWeapon() {
         double epsilon = 1.0;
         double x = random.nextDouble();
         double highestProbability = 0.0;
