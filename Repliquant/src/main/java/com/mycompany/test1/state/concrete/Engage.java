@@ -91,11 +91,6 @@ public class Engage extends Behavior {
         boolean choix;
         Repliquant bot = getBot();
         if (location != null) {
-            if (!weaponry.hasLoadedRangedWeapon()) {
-                bot.getBody().getCommunication().sendGlobalTextMessage("no weapon");
-                noAmmo();
-                return;
-            }
             distance = location.getDistance(bot.getBot().getLocation());
             if (distance > 4000 && weaponry.hasAmmoForWeapon((UT2004ItemType.LIGHTNING_GUN))) {
                 shoot.changeWeapon(UT2004ItemType.LIGHTNING_GUN);
@@ -122,7 +117,11 @@ public class Engage extends Behavior {
                     bot.chooseWeapon();
                     weaponPref = bot.getCurrentWeapon();
                 }
-                shoot.shoot(new WeaponPref(weaponPref.getWeapon(), weaponPref.isUsingPrimary()), alea);
+                if (weaponPref == null) {
+                    noAmmo();
+                } else {
+                    shoot.shoot(new WeaponPref(weaponPref.getWeapon(), weaponPref.isUsingPrimary()), alea);
+                }
             }
         } else {
             shoot.stopShooting();
