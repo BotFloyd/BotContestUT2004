@@ -241,11 +241,12 @@ public class Repliquant extends UT2004BotModuleController {
                 tempList.add(wPrefs.get(i));
             }
         }
+        if (tempList.isEmpty()) {
+            currentWeapon = null;
+            return;
+        }
         if (x < epsilon) {
             log.info("Arme au hasard");
-            if(tempList.isEmpty()){
-                return;
-            }
             currentWeapon = tempList.get(random.nextInt(tempList.size()));
         } else {
             log.info("Arme avec la plus grande probabilité");
@@ -264,10 +265,9 @@ public class Repliquant extends UT2004BotModuleController {
     }
 
     /*@ObjectClassEventListener(eventClass = WorldObjectAppearedEvent.class, objectClass = Player.class)
-    protected void playerAppeared(WorldObjectAppearedEvent<Player> event) {
-        chooseWeapon();
-    }*/
-
+     protected void playerAppeared(WorldObjectAppearedEvent<Player> event) {
+     chooseWeapon();
+     }*/
     public Player getTarget() {
         return target;
     }
