@@ -7,8 +7,11 @@ import com.mycompany.test1.state.concrete.Engage;
 import com.mycompany.test1.state.concrete.Defense;
 import com.mycompany.test1.state.concrete.Collect;
 import com.mycompany.test1.state.Behavior;
+import com.mycompany.test1.state.concrete.Travel;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
+import cz.cuni.amis.pogamut.base3d.worldview.object.ILocated;
+import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
@@ -23,6 +26,7 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotKill
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.ConfigChange;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.GameInfo;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.InitedMessage;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerKilled;
 import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
@@ -34,16 +38,23 @@ import javax.vecmath.Vector3d;
 
 public class Repliquant extends UT2004BotModuleController {
 
-    Behavior now;
-    Pursue pursue = new Pursue(this);
-    Collect collect = new Collect(this);
-    Engage engage = new Engage(this);
-    Defense defense = new Defense(this);
-    Player target;
-    List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
-    WeaponPreferences currentWeapon;
+    private Behavior now;
+    private Pursue pursue = new Pursue(this);
+    private Collect collect = new Collect(this);
+    private Engage engage = new Engage(this);
+    private Defense defense = new Defense(this);
+    private Travel travel = new Travel(this);
+    private Player target;
+    private List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
+    private WeaponPreferences currentWeapon;
     private UT2004PathAutoFixer autoFixer;
-    int mort = 0, kill = 0, risque;
+    private int mort = 0, kill = 0, risque;
+    private boolean navMeshDrawn = false, offMeshLinksDrawn = false;
+    private int waitForMesh;
+    private double waitingForMesh;
+    private int waitForOffMeshLinks;
+    private double waitingForOffMeshLinks;
+    Item nearbyObj;
 
     IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>> playerAppeared = new IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>>() {
         @Override
@@ -78,17 +89,21 @@ public class Repliquant extends UT2004BotModuleController {
         });
         raycasting.endRayInitSequence();
         getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
+        autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
     }
 
     @Override
     public Initialize getInitializeCommand() {
         return (new Parameters().setParams(bot.getParams()).initialize());
     }
+    
+    @Override
+    public void mapInfoObtained() {
+    	navMeshModule.setReloadNavMesh(true);	
+    }
 
     @Override
     public void prepareBot(UT2004Bot bot) {
-
-        autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
         wPrefs.add(new WeaponPreferences(UT2004ItemType.REDEEMER, 6, 0.9, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.6, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.55, false));
@@ -152,10 +167,14 @@ public class Repliquant extends UT2004BotModuleController {
          .add(UT2004ItemType.LIGHTNING_GUN, true);
          shoot.setChangeWeaponCooldown(2000);*/
     }
+    
+    boolean nav;
 
     @Override
     public void logic() throws PogamutException {
-        //cheatArme();
+        if (!drawNavMesh()) return;
+        if (!drawOffMeshLinks()) return;
+        nearbyObj = items.getNearestVisibleItem();
         if (players.canSeeEnemies()) {
             if (target == null || !target.isVisible()) {
                 target = players.getNearestVisibleEnemy();
@@ -165,6 +184,10 @@ public class Repliquant extends UT2004BotModuleController {
         } else if (target == null && (senses.seeIncomingProjectile() || senses.isBeingDamaged())) {
             bot.getBotName().setInfo("DEFENSE");
             now = defense;
+        } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 50) {
+            bot.getBotName().setInfo("TRAVEL");
+            bot.getLog().info("RECUPERATION D'UN ITEM PROCHE SUR LE CHEMIN");
+            now = travel;
         } else if (target != null && weaponry.hasLoadedRangedWeapon()) {
             bot.getBotName().setInfo("PURSUE");
             shoot.stopShooting();
@@ -279,10 +302,54 @@ public class Repliquant extends UT2004BotModuleController {
     public void setTarget(Player target) {
         this.target = target;
     }
+    
+    private boolean drawNavMesh() { 
+        if (!navMeshDrawn) {
+            navMeshDrawn = true;
+            navMeshModule.getNavMeshDraw().clearAll();
+            navMeshModule.getNavMeshDraw().draw(true, false);
+            waitForMesh = navMeshModule.getNavMesh().getPolys().size() / 35;
+            waitingForMesh = -info.getTimeDelta();
+        }
+        if (waitForMesh > 0) {
+            waitForMesh -= info.getTimeDelta();
+            waitingForMesh += info.getTimeDelta();
+            if (waitingForMesh > 2) {
+                    waitingForMesh = 0;
+            }
+            if (waitForMesh > 0) {
+                    return false;
+            }    		
+        }
+        return true;
+    }
+
+    private boolean drawOffMeshLinks() { 		
+        if (!offMeshLinksDrawn) {
+            offMeshLinksDrawn = true;
+            if (navMeshModule.getNavMesh().getOffMeshPoints().size() == 0) {
+                return true;
+            }
+            navMeshModule.getNavMeshDraw().draw(false, true);
+            waitForOffMeshLinks = navMeshModule.getNavMesh().getOffMeshPoints().size() / 10;
+            waitingForOffMeshLinks = -info.getTimeDelta();
+        }
+        if (waitForOffMeshLinks > 0) {
+            waitForOffMeshLinks -= info.getTimeDelta();
+            waitingForOffMeshLinks += info.getTimeDelta();
+            if (waitingForOffMeshLinks > 2) {
+                    waitingForOffMeshLinks = 0;
+            }
+            if (waitForOffMeshLinks > 0) {
+                    return false;
+            }    		
+        }
+        return true;
+    }
 
     public static void main(String args[]) throws PogamutException {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
-                new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
                 new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }
 
