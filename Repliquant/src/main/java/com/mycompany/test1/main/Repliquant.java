@@ -61,7 +61,6 @@ public class Repliquant extends UT2004BotModuleController {
         dodge = new Dodge(this);
         initialization = new Initialization(this);
         tabooItems = new TabooSet(bot);
-        raycasting.createRay("BOTTOMBACK", new Vector3d(-1, 0, -0.3), 250, false, false, false);
         initialization.raycastingInit();
         initialization.navigationInit();
         initialization.wPrefsInit(wPrefs);
