@@ -10,18 +10,9 @@ public class Travel extends Behavior {
     public Travel (Repliquant bot) {
         super(bot);
     }
-    
-    public void initVars() {
-        Repliquant bot = getBot();
-        navigation = bot.getNavigation();
-        nmNav = bot.getNMNav();
-        if (nmNav.isAvailable())
-            navigation = nmNav;
-    }
 
     @Override
     public void performs() {
-        initVars();
         Item obj = getBot().getItems().getNearestVisibleItem();
         if (navigation.isNavigating()) {
             if (obj != null) {

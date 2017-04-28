@@ -2,7 +2,6 @@ package com.mycompany.test1.state.concrete;
 
 import com.mycompany.test1.state.Behavior;
 import com.mycompany.test1.main.Repliquant;
-import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.AdrenalineCombo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
@@ -20,7 +19,6 @@ public class Collect extends Behavior {
     Weaponry weaponry;
     NavPoints nav;
     Map<UT2004ItemType, Double> groupPriority = new HashMap(); 
-    AdrenalineCombo combo;
     TabooSet<Item> tabooItems;
     
     public Collect(Repliquant unBot) {
@@ -31,22 +29,14 @@ public class Collect extends Behavior {
         Repliquant bot = getBot();
         items = bot.getItems();
         info = bot.getInfo();
-        navigation = bot.getNavigation();
         weaponry = bot.getWeaponry();
         nav = bot.getNavPoints();
-        combo = bot.getCombo();
-        nmNav = bot.getNMNav();
         tabooItems = bot.getTabooItems();
-        if (nmNav.isAvailable())
-            navigation = nmNav;
     }
     
     @Override
     public void performs() {
         initVars();
-        if(info.getHealth() < 70 && combo.canPerformCombo()){
-            combo.performDefensive();
-        }
         if(! navigation.isNavigating()){ 
             Item selectedItem = null;
             Double highestPriority = 0.0;

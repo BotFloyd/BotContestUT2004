@@ -68,21 +68,17 @@ public class Engage extends Behavior {
         this.bottomBack = ray;
     }
 
-    public void initVars() {
+    private void initVars() {
         Repliquant bot = getBot();
-        navigation = bot.getNavigation();
         shoot = bot.getShoot();
         random = bot.getRandom();
         move = bot.getMove();
-        location = bot.getPlayers().getNearestVisibleEnemy().getLocation();
+        location = bot.getTarget().getLocation();
         weaponPref = bot.getCurrentWeapon();
         senses = bot.getSenses();
         weaponry = bot.getWeaponry();
         items = bot.getItems();
         info = bot.getInfo();
-        nmNav = bot.getNMNav();
-        if (nmNav.isAvailable())
-            navigation = nmNav;
     }
 
     @Override

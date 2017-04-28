@@ -2,7 +2,6 @@ package com.mycompany.test1.state;
 
 import com.mycompany.test1.main.Repliquant;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
-import cz.cuni.amis.pogamut.ut2004.agent.navigation.navmesh.pathfollowing.NavMeshNavigation;
 
 /**
  * Classe mère des états, ne peut être instanciée. Behavior est composée d'un
@@ -13,7 +12,6 @@ import cz.cuni.amis.pogamut.ut2004.agent.navigation.navmesh.pathfollowing.NavMes
 public abstract class Behavior {
     
     private final Repliquant unBot;
-    protected NavMeshNavigation nmNav;
     protected IUT2004Navigation navigation;
     
     /**
@@ -22,6 +20,10 @@ public abstract class Behavior {
      */
     public Behavior(Repliquant unBot){
         this.unBot = unBot;
+        if (unBot.getNMNav().isAvailable())
+            navigation = unBot.getNMNav();
+        else
+            navigation = unBot.getNavigation();
     }
     
     /**
