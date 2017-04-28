@@ -12,6 +12,7 @@ import com.mycompany.test1.state.concrete.Travel;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
+import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
@@ -54,7 +55,8 @@ public class Repliquant extends UT2004BotModuleController {
     private double waitingForMesh;
     private int waitForOffMeshLinks;
     private double waitingForOffMeshLinks;
-    Item nearbyObj;
+    private Item nearbyObj;
+    private TabooSet<Item> tabooItems;
 
     IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>> playerAppeared = new IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>>() {
         @Override
@@ -125,12 +127,16 @@ public class Repliquant extends UT2004BotModuleController {
         getWorldView().addObjectListener(Player.class, WorldObjectAppearedEvent.class, playerAppeared);
     }
     
-    boolean nav;
-
+    public TabooSet<Item> getTabooItems () {
+        return (tabooItems);
+    }
+    
     @Override
     public void logic() throws PogamutException {
-        if (!drawNavMesh()) return;
-        if (!drawOffMeshLinks()) return;
+        if (nmNav.isAvailable()) {
+            if (!drawNavMesh()) return;
+            if (!drawOffMeshLinks()) return;
+        }
         nearbyObj = items.getNearestVisibleItem();
         if (players.canSeeEnemies()) {
             if (target == null || !target.isVisible()) {
