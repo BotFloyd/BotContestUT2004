@@ -52,10 +52,6 @@ public class Collect extends Behavior {
             Double highestPriority = 0.0;
             Double priority;
             updateGroupPriority();
-            
-            if(tabooItems == null){
-                tabooItems = new TabooSet(getBot().getBot());
-            }
             if(!items.getSpawnedItems().values().isEmpty()){
                 for (Item item : tabooItems.filter(items.getSpawnedItems().values())) {
                     if(groupPriority.containsKey(item.getType()) && (groupPriority.get(item.getType()) > 0)){

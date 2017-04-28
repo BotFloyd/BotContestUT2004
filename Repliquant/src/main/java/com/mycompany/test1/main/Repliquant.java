@@ -9,11 +9,15 @@ import com.mycompany.test1.state.concrete.Collect;
 import com.mycompany.test1.state.Behavior;
 import com.mycompany.test1.state.concrete.Dodge;
 import com.mycompany.test1.state.concrete.Travel;
+import cz.cuni.amis.pogamut.base.agent.navigation.IPathExecutorState;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
+import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.NavPoints;
 import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathExecutorStuckState;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
@@ -27,6 +31,7 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.ConfigC
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.GameInfo;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.InitedMessage;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.NavPoint;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerKilled;
 import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
@@ -67,6 +72,21 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
+        tabooItems = new TabooSet(bot);
+        navigation.getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
+
+            @Override
+            public void flagChanged(IPathExecutorState changedValue) {
+                pathExecutorStateChange(changedValue);
+            }
+        });
+        nmNav.getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
+
+            @Override
+            public void flagChanged(IPathExecutorState changedValue) {
+                pathExecutorStateChange(changedValue);
+            }
+        });
         getBot().getAct().act(new RemoveRay("All"));
         raycasting.createRay("LEFT90", new Vector3d(0, -1, 0), 175, true, false, false);
         raycasting.createRay("RIGHT90", new Vector3d(0, 1, 0), 175, true, false, false);
@@ -92,6 +112,27 @@ public class Repliquant extends UT2004BotModuleController {
         raycasting.endRayInitSequence();
         getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
         autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
+    }
+    
+    protected void pathExecutorStateChange(IPathExecutorState event) {
+        switch (event.getState()) {
+            case PATH_COMPUTATION_FAILED:
+                // if path computation fails to whatever reason, just try another navpoint
+                // taboo bad navpoint for 3 minutes
+                break;
+
+            case TARGET_REACHED:
+                // taboo reached navpoint for 3 minutes
+                break;
+
+            case STUCK:
+                // the bot has stuck! ... target nav point is unavailable currently
+                break;
+
+            case STOPPED:
+                // path execution has stopped
+                break;
+        }
     }
 
     @Override
@@ -138,6 +179,8 @@ public class Repliquant extends UT2004BotModuleController {
             if (!drawOffMeshLinks()) return;
         }
         nearbyObj = items.getNearestVisibleItem();
+        if (nearbyObj != null && tabooItems.isTaboo(nearbyObj))
+            nearbyObj = null;
         if (players.canSeeEnemies()) {
             if (target == null || !target.isVisible()) {
                 target = players.getNearestVisibleEnemy();
@@ -153,6 +196,7 @@ public class Repliquant extends UT2004BotModuleController {
         } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 300) {
             bot.getBotName().setInfo("TRAVEL");
             now = travel;
+            tabooItems.add(nearbyObj, items.getItemRespawnTime(nearbyObj));
         } else if (target != null && weaponry.hasLoadedRangedWeapon()) {
             bot.getBotName().setInfo("PURSUE");
             shoot.stopShooting();
@@ -170,12 +214,10 @@ public class Repliquant extends UT2004BotModuleController {
         UT2004ItemType munition = UT2004ItemType.SHOCK_RIFLE_AMMO;
 
         if (!weaponry.hasWeapon(arme)) {
-            log.info("Getting WEAPON");
             getAct().act(new AddInventory().setType(arme.getName()));
         }
 
         if (!weaponry.hasLoadedWeapon(arme)) {
-            log.info("Getting AMMO");
             getAct().act(new AddInventory().setType(munition.getName()));
         }
 
@@ -223,11 +265,9 @@ public class Repliquant extends UT2004BotModuleController {
         for (int i = 0; i < wPrefs.size(); i++) {
             if (wPrefs.get(i).isUsingPrimary()
                     && weaponry.hasPrimaryLoadedWeapon(wPrefs.get(i).getWeapon())) {
-                log.info("Add : " + wPrefs.get(i).getWeapon().toString());
                 tempList.add(wPrefs.get(i));
             } else if (!(wPrefs.get(i).isUsingPrimary())
                     && weaponry.hasSecondaryLoadedWeapon(wPrefs.get(i).getWeapon())) {
-                log.info("Add : " + wPrefs.get(i).getWeapon().toString());
                 tempList.add(wPrefs.get(i));
             }
         }
@@ -236,10 +276,8 @@ public class Repliquant extends UT2004BotModuleController {
             return;
         }
         if (x < epsilon) {
-            log.info("Arme au hasard");
             currentWeapon = tempList.get(random.nextInt(tempList.size()));
         } else {
-            log.info("Arme avec la plus grande probabilité");
             for (int i = 0; i < tempList.size(); i++) {
                 if (highestProbability < tempList.get(i).getProbability()) {
                     temp = tempList.get(i);
