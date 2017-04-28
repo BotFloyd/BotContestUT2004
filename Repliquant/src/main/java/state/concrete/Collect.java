@@ -1,7 +1,7 @@
-package com.mycompany.test1.state.concrete;
+package state.concrete;
 
-import com.mycompany.test1.state.Behavior;
-import com.mycompany.test1.main.Repliquant;
+import state.Behavior;
+import main.Repliquant;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;

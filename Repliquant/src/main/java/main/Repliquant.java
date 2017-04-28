@@ -1,15 +1,15 @@
-package com.mycompany.test1.main;
+package main;
 
-import com.mycompany.test1.settings.Initialization;
-import com.mycompany.test1.settings.Parameters;
-import com.mycompany.test1.settings.WeaponPreferences;
-import com.mycompany.test1.state.concrete.Pursue;
-import com.mycompany.test1.state.concrete.Engage;
-import com.mycompany.test1.state.concrete.Defense;
-import com.mycompany.test1.state.concrete.Collect;
-import com.mycompany.test1.state.Behavior;
-import com.mycompany.test1.state.concrete.Dodge;
-import com.mycompany.test1.state.concrete.Travel;
+import settings.Initialization;
+import settings.Parameters;
+import settings.WeaponPreferences;
+import state.concrete.Pursue;
+import state.concrete.Engage;
+import state.concrete.Defense;
+import state.concrete.Collect;
+import state.Behavior;
+import state.concrete.Dodge;
+import state.concrete.Travel;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
@@ -44,7 +44,7 @@ public class Repliquant extends UT2004BotModuleController {
     private Dodge dodge;
     private Initialization initialization;
     private Player target;
-    private List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
+    private final List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
     private WeaponPreferences currentWeapon;
     private UT2004PathAutoFixer autoFixer;
     private int mort = 0, kill = 0, risque;

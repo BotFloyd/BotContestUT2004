@@ -1,7 +1,7 @@
-package com.mycompany.test1.settings;
+package settings;
 
-import com.mycompany.test1.main.Repliquant;
-import com.mycompany.test1.state.concrete.Engage;
+import main.Repliquant;
+import state.concrete.Engage;
 import cz.cuni.amis.pogamut.base.agent.navigation.IPathExecutorState;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Raycasting;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;

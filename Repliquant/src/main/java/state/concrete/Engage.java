@@ -1,8 +1,8 @@
-package com.mycompany.test1.state.concrete;
+package state.concrete;
 
-import com.mycompany.test1.main.Repliquant;
-import com.mycompany.test1.settings.WeaponPreferences;
-import com.mycompany.test1.state.Behavior;
+import main.Repliquant;
+import settings.WeaponPreferences;
+import state.Behavior;
 import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensomotoric.Weaponry;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;

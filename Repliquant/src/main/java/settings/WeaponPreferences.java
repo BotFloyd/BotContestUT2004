@@ -1,4 +1,4 @@
-package com.mycompany.test1.settings;
+package settings;
 
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 

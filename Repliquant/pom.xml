@@ -7,8 +7,6 @@
 		<artifactId>pogamut-ut2004-bot-pom</artifactId>
 		<version>3.7.0</version>
 	</parent>
-
-	<groupId>com.mycompany</groupId>
 	<artifactId>Repliquant</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -17,7 +15,7 @@
 	<url>http://pogamut.cuni.cz/pogamut_files/latest/doc/tutorials/EmptyBotTutorial.html</url>
 
 	<properties>
-		<bot.main.class>com.mycompany.test1.main.Repliquant</bot.main.class>
+		<bot.main.class>main.Repliquant</bot.main.class>
 	</properties>
 
 	<repositories>

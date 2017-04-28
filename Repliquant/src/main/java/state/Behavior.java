@@ -1,6 +1,6 @@
-package com.mycompany.test1.state;
+package state;
 
-import com.mycompany.test1.main.Repliquant;
+import main.Repliquant;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 
 /**

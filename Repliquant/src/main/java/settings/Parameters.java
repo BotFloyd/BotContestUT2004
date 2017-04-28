@@ -1,4 +1,4 @@
-package com.mycompany.test1.settings;
+package settings;
 
 import cz.cuni.amis.pogamut.ut2004.bot.params.UT2004BotParameters;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Initialize;
