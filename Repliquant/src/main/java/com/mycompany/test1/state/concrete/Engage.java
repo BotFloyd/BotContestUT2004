@@ -68,8 +68,9 @@ public class Engage extends Behavior {
         this.bottomBack = ray;
     }
 
-    private void initVars() {
+    public void initVars() {
         Repliquant bot = getBot();
+        navigation = bot.getNavigation();
         shoot = bot.getShoot();
         random = bot.getRandom();
         move = bot.getMove();
@@ -79,6 +80,9 @@ public class Engage extends Behavior {
         weaponry = bot.getWeaponry();
         items = bot.getItems();
         info = bot.getInfo();
+        nmNav = bot.getNMNav();
+        if (nmNav.isAvailable())
+            navigation = nmNav;
     }
 
     @Override

@@ -14,12 +14,6 @@ public class Defense extends Behavior {
         super(bot);
     }
 
-    private void initVars() {
-        Repliquant bot = getBot();
-        move = bot.getMove();
-        players = bot.getPlayers();
-    }
-    
     @Override
     public void performs() {
         initVars();
@@ -27,4 +21,10 @@ public class Defense extends Behavior {
             move.turnHorizontal(180);
         }
     }
+
+    private void initVars() {
+        move = getBot().getMove();
+        players = getBot().getPlayers();
+    }
+
 }
