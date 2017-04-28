@@ -1,0 +1,158 @@
+@startuml
+abstract class state.Behavior {
+    - Repliquant unBot
+    # IUT2004Navigation navigation
+    + {abstract} void performs()
+    + Repliquant getBot()
+}
+class main.Repliquant {
+    - Behavior now
+    - Pursue pursue
+    - Collect collect
+    - Engage engage
+    - Defense defense
+    - Travel travel
+    - Dodge dodge
+    - Initialization initialization
+    - Player target
+    - List<WeaponPreferences> wPrefs
+    - WeaponPreferences currentWeapon
+    - UT2004PathAutoFixer autoFixer
+    - int mort, kill, risque
+    - Item nearbyObj
+    - TabooSet<Item> tabooItems
+    ~ IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>> playerAppeared
+    + void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init)
+    + Initialize getInitializeCommand()
+    + void mapInfoObtained()
+    + void prepareBot(UT2004Bot bot)
+    + void logic()
+    + void playerKilled(PlayerKilled event)
+    + void botKilled(BotKilled event)
+    + void chooseWeapon()
+    + Player getTarget()
+    + Engage getEngage()
+    + TabooSet<Item> getTabooItems()
+    + WeaponPreferences getCurrentWeapon()
+    + void setTarget(Player target)
+    + {static} void main(String args[])
+    - void cheatArme()
+}
+class settings.Initialization {
+    - Repliquant bot
+    - boolean navMeshDrawn, offMeshLinksDrawn
+    + void raycastingInit()
+    + void navigationInit()
+    + boolean drawNavMesh()
+    + boolean drawOffMeshLinks()
+    + void wPrefsInit (List <WeaponPreferences> wPrefs)
+    - void pathExecutorStateChange(IPathExecutorState event)
+}
+class settings.Parameters {
+    ~ UT2004BotParameters params
+    - String botSkin
+    - String name
+    + Parameters setParams(UT2004BotParameters params)
+    + String getBotSkin()
+    + Parameters setBotSkin(String botSkin)
+    + String getName()
+    + Parameters setName(String name)
+    + int getSkillLevel()
+    + Initialize initialize()
+}
+class settings.WeaponPreferences {
+    - UT2004ItemType weapon
+    - double weight
+    - double probability
+    - double initialProbability
+    - boolean usePrimary
+    - int nbKills
+    - int nbDeaths
+    + void updateProbability()
+    + double getProbability()
+    + UT2004ItemType getWeapon()
+    + boolean isUsingPrimary()
+    + void upNbKills()
+    + void upNbDeaths()
+}
+class state.concrete.Collect {
+    ~ Items items
+    ~ AgentInfo info
+    ~ Weaponry weaponry
+    ~ NavPoints nav
+    ~ Map<UT2004ItemType, Double> groupPriority
+    ~ TabooSet<Item> tabooItems
+    + void performs()
+    - void initVars()
+    - void updateGroupPriority()
+}
+class state.concrete.Defense {
+    ~ AdvancedLocomotion move
+    ~ Players players
+    + void performs()
+    - void initVars()
+}
+class state.concrete.Dodge {
+    ~ Senses senses
+    ~ AgentInfo info
+    ~ AdvancedLocomotion move
+    + void performs()
+    - void initVars()
+}
+class state.concrete.Engage {
+    ~ ImprovedShooting shoot
+    ~ Random random
+    ~ AdvancedLocomotion move
+    ~ Location location, alea
+    ~ Senses senses
+    ~ AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2, back, bottomBack
+    ~ WeaponPreferences weaponPref
+    ~ Weaponry weaponry
+    ~ Items items
+    ~ AgentInfo info
+    + void setRayRight(AutoTraceRay ray)
+    + void setRayLeft(AutoTraceRay ray)
+    + void setRayBottomLeft(AutoTraceRay ray)
+    + void setRayBottomRight(AutoTraceRay ray)
+    + void setRayBottomLeft2(AutoTraceRay ray)
+    + void setRayBottomRight2(AutoTraceRay ray)
+    + void setRayBack(AutoTraceRay ray)
+    + void setRayBottomBack(AutoTraceRay ray)
+    + void performs()
+    - void initVars()
+    - void moveBackwards()
+    - void shockRifle()
+    - boolean choixAction()
+    - void noAmmo()
+}
+class state.concrete.Pursue {
+    ~ Player pursued
+    + void performs()
+}
+class state.concrete.Travel {
+    + void performs()
+}
+state.Behavior ..> main.Repliquant
+main.Repliquant ..> state.Behavior
+main.Repliquant ..> settings.Parameters
+main.Repliquant ..> settings.WeaponPreferences
+main.Repliquant ..> state.concrete.Collect
+main.Repliquant ..> state.concrete.Defense
+main.Repliquant ..> state.concrete.Dodge
+main.Repliquant ..> state.concrete.Engage
+main.Repliquant ..> state.concrete.Pursue
+main.Repliquant ..> state.concrete.Travel
+state.concrete.Collect --|> state.Behavior
+state.concrete.Collect ..> main.Repliquant
+state.concrete.Defense --|> state.Behavior
+state.concrete.Defense ..> main.Repliquant
+state.concrete.Dodge --|> state.Behavior
+state.concrete.Dodge ..> main.Repliquant
+state.concrete.Engage --|> state.Behavior
+state.concrete.Engage ..> main.Repliquant
+state.concrete.Engage ..> settings.WeaponPreferences
+state.concrete.Pursue --|> state.Behavior
+state.concrete.Pursue ..> main.Repliquant
+state.concrete.Travel --|> state.Behavior
+state.concrete.Travel ..> main.Repliquant
+@enduml

@@ -107,6 +107,7 @@ public class Repliquant extends UT2004BotModuleController {
             now = dodge;
         } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 300) {
             bot.getBotName().setInfo("TRAVEL");
+            shoot.stopShooting();
             now = travel;
             tabooItems.add(nearbyObj, items.getItemRespawnTime(nearbyObj));
         } else if (target != null && weaponry.hasLoadedRangedWeapon()) {
