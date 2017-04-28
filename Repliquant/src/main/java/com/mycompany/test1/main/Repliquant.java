@@ -7,11 +7,10 @@ import com.mycompany.test1.state.concrete.Engage;
 import com.mycompany.test1.state.concrete.Defense;
 import com.mycompany.test1.state.concrete.Collect;
 import com.mycompany.test1.state.Behavior;
+import com.mycompany.test1.state.concrete.Dodge;
 import com.mycompany.test1.state.concrete.Travel;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
-import cz.cuni.amis.pogamut.base3d.worldview.object.ILocated;
-import cz.cuni.amis.pogamut.base3d.worldview.object.Location;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
@@ -44,6 +43,7 @@ public class Repliquant extends UT2004BotModuleController {
     private Engage engage = new Engage(this);
     private Defense defense = new Defense(this);
     private Travel travel = new Travel(this);
+    private Dodge dodge = new Dodge(this);
     private Player target;
     private List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
     private WeaponPreferences currentWeapon;
@@ -123,49 +123,6 @@ public class Repliquant extends UT2004BotModuleController {
         currentWeapon = new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 1, 0.2, true);
         wPrefs.add(currentWeapon);
         getWorldView().addObjectListener(Player.class, WorldObjectAppearedEvent.class, playerAppeared);
-        // FIRST we DEFINE GENERAL WEAPON PREFERENCES
-        /*weaponPrefs.addGeneralPref(UT2004ItemType.ROCKET_LAUNCHER, false);
-         weaponPrefs.addGeneralPref(UT2004ItemType.ROCKET_LAUNCHER, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.SNIPER_RIFLE, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.FLAK_CANNON, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.FLAK_CANNON, false);
-         weaponPrefs.addGeneralPref(UT2004ItemType.MINIGUN, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.MINIGUN, false);
-         weaponPrefs.addGeneralPref(UT2004ItemType.LIGHTNING_GUN, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.SHOCK_RIFLE, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.SHOCK_RIFLE, false);
-         weaponPrefs.addGeneralPref(UT2004ItemType.LINK_GUN, false);
-         weaponPrefs.addGeneralPref(UT2004ItemType.LINK_GUN, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.BIO_RIFLE, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.ASSAULT_RIFLE, true);
-         weaponPrefs.addGeneralPref(UT2004ItemType.ASSAULT_RIFLE, false);
-
-         // AND THEN RANGED
-         weaponPrefs.newPrefsRange(600)
-         .add(UT2004ItemType.LINK_GUN, false)
-         .add(UT2004ItemType.BIO_RIFLE, false)
-         .add(UT2004ItemType.FLAK_CANNON, true);
-
-         weaponPrefs.newPrefsRange(1000)
-         .add(UT2004ItemType.FLAK_CANNON, true)
-         .add(UT2004ItemType.MINIGUN, false)
-         .add(UT2004ItemType.LINK_GUN, true)
-         .add(UT2004ItemType.ROCKET_LAUNCHER, true)
-         .add(UT2004ItemType.ASSAULT_RIFLE, true);
-
-         weaponPrefs.newPrefsRange(1500)
-         .add(UT2004ItemType.ROCKET_LAUNCHER, true)
-         .add(UT2004ItemType.MINIGUN, false)
-         .add(UT2004ItemType.SHOCK_RIFLE, false);
-
-         weaponPrefs.newPrefsRange(4000)
-         .add(UT2004ItemType.SHOCK_RIFLE, true)
-         .add(UT2004ItemType.ROCKET_LAUNCHER, false);
-
-         weaponPrefs.newPrefsRange(100000)
-         .add(UT2004ItemType.SNIPER_RIFLE, true)
-         .add(UT2004ItemType.LIGHTNING_GUN, true);
-         shoot.setChangeWeaponCooldown(2000);*/
     }
     
     boolean nav;
@@ -181,9 +138,12 @@ public class Repliquant extends UT2004BotModuleController {
             }
             bot.getBotName().setInfo("ENGAGE");
             now = engage;
-        } else if (target == null && (senses.seeIncomingProjectile() || senses.isBeingDamaged())) {
+        } else if (senses.isBeingDamaged()) {
             bot.getBotName().setInfo("DEFENSE");
             now = defense;
+        } else if (target == null && senses.seeIncomingProjectile()){
+            bot.getBotName().setInfo("DODGE");
+            now = dodge;
         } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 50) {
             bot.getBotName().setInfo("TRAVEL");
             bot.getLog().info("RECUPERATION D'UN ITEM PROCHE SUR LE CHEMIN");
@@ -287,10 +247,6 @@ public class Repliquant extends UT2004BotModuleController {
     public void botDamaged(BotDamaged event) {
     }
 
-    /*@ObjectClassEventListener(eventClass = WorldObjectAppearedEvent.class, objectClass = Player.class)
-     protected void playerAppeared(WorldObjectAppearedEvent<Player> event) {
-     chooseWeapon();
-     }*/
     public Player getTarget() {
         return target;
     }
@@ -349,7 +305,7 @@ public class Repliquant extends UT2004BotModuleController {
 
     public static void main(String args[]) throws PogamutException {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
-                //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
                 new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }
 
