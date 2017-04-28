@@ -3,30 +3,41 @@ package com.mycompany.test1.state.concrete;
 import com.mycompany.test1.main.Repliquant;
 import com.mycompany.test1.state.Behavior;
 import cz.cuni.amis.pogamut.base3d.worldview.object.ILocated;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.navmesh.pathfollowing.NavMeshNavigation;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 
 public class Travel extends Behavior {
-        
+    
+    NavMeshNavigation nmNav;
+    IUT2004Navigation navigation;
+    
     public Travel (Repliquant bot) {
         super(bot);
+    }
+    
+    public void initVars() {
+        Repliquant bot = getBot();
+        navigation = bot.getNavigation();
+        nmNav = bot.getNMNav();
+        if (nmNav.isAvailable())
+            navigation = nmNav;
     }
 
     @Override
     public void performs() {
-        Repliquant bot = getBot();
-        NavMeshNavigation nmNav = bot.getNMNav();
-        Item obj = bot.getItems().getNearestVisibleItem();
-        if (nmNav.isNavigating()) {
+        initVars();
+        Item obj = getBot().getItems().getNearestVisibleItem();
+        if (navigation.isNavigating()) {
             if (obj != null) {
-                ILocated last = nmNav.getLastTarget();
+                ILocated last = navigation.getLastTarget();
                 if (last != null) {
-                    nmNav.navigate(obj.getLocation());
-                    nmNav.setContinueTo(last);
+                    navigation.navigate(obj.getLocation());
+                    navigation.setContinueTo(last);
                 }
             }
         } else if (obj != null) {
-            nmNav.navigate(obj.getLocation());
+            navigation.navigate(obj.getLocation());
         }
     }
 }

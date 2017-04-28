@@ -144,9 +144,8 @@ public class Repliquant extends UT2004BotModuleController {
         } else if (target == null && senses.seeIncomingProjectile()){
             bot.getBotName().setInfo("DODGE");
             now = dodge;
-        } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 50) {
+        } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 300) {
             bot.getBotName().setInfo("TRAVEL");
-            bot.getLog().info("RECUPERATION D'UN ITEM PROCHE SUR LE CHEMIN");
             now = travel;
         } else if (target != null && weaponry.hasLoadedRangedWeapon()) {
             bot.getBotName().setInfo("PURSUE");
@@ -189,6 +188,8 @@ public class Repliquant extends UT2004BotModuleController {
             currentWeapon.upNbKills();
             currentWeapon.updateProbability();
             target = null;
+            bot.getBotName().setInfo("COLLECT");
+            now = collect;
         }
     }
 

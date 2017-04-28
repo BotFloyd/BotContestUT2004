@@ -10,6 +10,7 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPref;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.navmesh.pathfollowing.NavMeshNavigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType.Category;
@@ -33,6 +34,7 @@ public class Engage extends Behavior {
     Weaponry weaponry;
     Items items;
     AgentInfo info;
+    NavMeshNavigation nmNav;
 
     public Engage(Repliquant bot) {
         super(bot);
@@ -82,6 +84,9 @@ public class Engage extends Behavior {
         weaponry = bot.getWeaponry();
         items = bot.getItems();
         info = bot.getInfo();
+        nmNav = bot.getNMNav();
+        if (nmNav.isAvailable())
+            navigation = nmNav;
     }
 
     @Override
