@@ -8,8 +8,6 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.NavPoints;
 import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
-import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
-import cz.cuni.amis.pogamut.ut2004.agent.navigation.navmesh.pathfollowing.NavMeshNavigation;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 import java.util.HashMap;
@@ -19,8 +17,6 @@ public class Collect extends Behavior {
 
     Items items;
     AgentInfo info;
-    IUT2004Navigation navigation;
-    NavMeshNavigation nmNav;
     Weaponry weaponry;
     NavPoints nav;
     Map<UT2004ItemType, Double> groupPriority = new HashMap(); 

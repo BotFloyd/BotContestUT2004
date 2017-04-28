@@ -9,8 +9,6 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPref;
-import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
-import cz.cuni.amis.pogamut.ut2004.agent.navigation.navmesh.pathfollowing.NavMeshNavigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType.Category;
@@ -23,7 +21,6 @@ import java.util.Random;
 
 public class Engage extends Behavior {
 
-    IUT2004Navigation navigation;
     ImprovedShooting shoot;
     Random random;
     AdvancedLocomotion move;
@@ -34,7 +31,6 @@ public class Engage extends Behavior {
     Weaponry weaponry;
     Items items;
     AgentInfo info;
-    NavMeshNavigation nmNav;
 
     public Engage(Repliquant bot) {
         super(bot);
