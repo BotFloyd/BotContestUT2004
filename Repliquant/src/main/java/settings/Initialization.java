@@ -15,17 +15,12 @@ import javax.vecmath.Vector3d;
 
 public class Initialization {
     
-    private final Repliquant bot;
     private boolean navMeshDrawn = false, offMeshLinksDrawn = false;
     
-    public Initialization (Repliquant bot) {
-        this.bot = bot;
-    }
-    
-    public void raycastingInit() {
-        final Raycasting raycasting = bot.getRaycasting();
-        final Engage engage = bot.getEngage();
-        bot.getAct().act(new RemoveRay("All"));
+    public void raycastingInit(Repliquant unBot) {
+        final Raycasting raycasting = unBot.getRaycasting();
+        final Engage engage = unBot.getEngage();
+        unBot.getAct().act(new RemoveRay("All"));
         raycasting.createRay("LEFT90", new Vector3d(0, -1, 0), 175, true, false, false);
         raycasting.createRay("RIGHT90", new Vector3d(0, 1, 0), 175, true, false, false);
         raycasting.createRay("BOTTOMLEFT45", new Vector3d(0, -1, -0.4), 250, true, false, false);
@@ -48,18 +43,18 @@ public class Initialization {
             }
         });
         raycasting.endRayInitSequence();
-        bot.getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
+        unBot.getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
     }
     
-    public void navigationInit() {
-        bot.getNavigation().getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
+    public void navigationInit(Repliquant unBot) {
+        unBot.getNavigation().getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
 
             @Override
             public void flagChanged(IPathExecutorState changedValue) {
                 pathExecutorStateChange(changedValue);
             }
         });
-        bot.getNMNav().getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
+        unBot.getNMNav().getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
 
             @Override
             public void flagChanged(IPathExecutorState changedValue) {
@@ -89,11 +84,11 @@ public class Initialization {
         }
     }
     
-    public boolean drawNavMesh() {
+    public boolean drawNavMesh(Repliquant unBot) {
         double waitingForMesh = 0;
         int waitForMesh = 0;
-        NavMeshModule navMeshModule = bot.getNavMeshModule();
-        AgentInfo info = bot.getInfo();
+        NavMeshModule navMeshModule = unBot.getNavMeshModule();
+        AgentInfo info = unBot.getInfo();
         if (!navMeshDrawn) {
             navMeshDrawn = true;
             navMeshModule.getNavMeshDraw().clearAll();
@@ -112,11 +107,11 @@ public class Initialization {
         return true;
     }
 
-    public boolean drawOffMeshLinks() {
+    public boolean drawOffMeshLinks(Repliquant unBot) {
         double waitingForOffMeshLinks = 0;
         int waitForOffMeshLinks = 0;
-        NavMeshModule navMeshModule = bot.getNavMeshModule();
-        AgentInfo info = bot.getInfo();
+        NavMeshModule navMeshModule = unBot.getNavMeshModule();
+        AgentInfo info = unBot.getInfo();
         if (!offMeshLinksDrawn) {
             offMeshLinksDrawn = true;
             if (navMeshModule.getNavMesh().getOffMeshPoints().isEmpty())

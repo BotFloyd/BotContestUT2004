@@ -59,10 +59,10 @@ public class Repliquant extends UT2004BotModuleController {
         defense = new Defense();
         travel = new Travel();
         dodge = new Dodge();
-        initialization = new Initialization(this);
+        initialization = new Initialization();
         tabooItems = new TabooSet(bot);
-        initialization.raycastingInit();
-        initialization.navigationInit();
+        initialization.raycastingInit(this);
+        initialization.navigationInit(this);
         initialization.wPrefsInit(wPrefs);
         if (nmNav.isAvailable())
             autoFixer = new UT2004PathAutoFixer(bot, nmNav.getPathExecutor(), fwMap, aStar, navBuilder);
@@ -90,8 +90,8 @@ public class Repliquant extends UT2004BotModuleController {
     @Override
     public void logic() throws PogamutException {
         if (nmNav.isAvailable()) {
-            if (!initialization.drawNavMesh()) return;
-            if (!initialization.drawOffMeshLinks()) return;
+            if (!initialization.drawNavMesh(this)) return;
+            if (!initialization.drawOffMeshLinks(this)) return;
         }
         nearbyObj = items.getNearestVisibleItem();
         if (nearbyObj != null && tabooItems.isTaboo(nearbyObj))
