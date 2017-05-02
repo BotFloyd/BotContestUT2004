@@ -14,9 +14,9 @@ import java.util.List;
 import javax.vecmath.Vector3d;
 
 public class Initialization {
-    
+
     private boolean navMeshDrawn = false, offMeshLinksDrawn = false;
-    
+
     public void raycastingInit(Repliquant unBot) {
         final Raycasting raycasting = unBot.getRaycasting();
         final Engage engage = unBot.getEngage();
@@ -45,7 +45,7 @@ public class Initialization {
         raycasting.endRayInitSequence();
         unBot.getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
     }
-    
+
     public void navigationInit(Repliquant unBot) {
         unBot.getNavigation().getPathExecutor().getState().addStrongListener(new FlagListener<IPathExecutorState>() {
 
@@ -62,7 +62,7 @@ public class Initialization {
             }
         });
     }
-    
+
     private void pathExecutorStateChange(IPathExecutorState event) {
         switch (event.getState()) {
             case PATH_COMPUTATION_FAILED:
@@ -83,7 +83,7 @@ public class Initialization {
                 break;
         }
     }
-    
+
     public boolean drawNavMesh(Repliquant unBot) {
         double waitingForMesh = 0;
         int waitForMesh = 0;
@@ -99,10 +99,12 @@ public class Initialization {
         if (waitForMesh > 0) {
             waitForMesh -= info.getTimeDelta();
             waitingForMesh += info.getTimeDelta();
-            if (waitingForMesh > 2)
-                    waitingForMesh = 0;
-            if (waitForMesh > 0)
-                    return false;		
+            if (waitingForMesh > 2) {
+                waitingForMesh = 0;
+            }
+            if (waitForMesh > 0) {
+                return false;
+            }
         }
         return true;
     }
@@ -114,8 +116,9 @@ public class Initialization {
         AgentInfo info = unBot.getInfo();
         if (!offMeshLinksDrawn) {
             offMeshLinksDrawn = true;
-            if (navMeshModule.getNavMesh().getOffMeshPoints().isEmpty())
+            if (navMeshModule.getNavMesh().getOffMeshPoints().isEmpty()) {
                 return true;
+            }
             navMeshModule.getNavMeshDraw().draw(false, true);
             waitForOffMeshLinks = navMeshModule.getNavMesh().getOffMeshPoints().size() / 10;
             waitingForOffMeshLinks = -info.getTimeDelta();
@@ -123,15 +126,17 @@ public class Initialization {
         if (waitForOffMeshLinks > 0) {
             waitForOffMeshLinks -= info.getTimeDelta();
             waitingForOffMeshLinks += info.getTimeDelta();
-            if (waitingForOffMeshLinks > 2)
-                    waitingForOffMeshLinks = 0;
-            if (waitForOffMeshLinks > 0)
-                    return false;		
+            if (waitingForOffMeshLinks > 2) {
+                waitingForOffMeshLinks = 0;
+            }
+            if (waitForOffMeshLinks > 0) {
+                return false;
+            }
         }
         return true;
     }
 
-    public void wPrefsInit (List <WeaponPreferences> wPrefs) {
+    public void wPrefsInit(List<WeaponPreferences> wPrefs) {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.REDEEMER, 6, 0.9, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.6, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.55, false));
@@ -147,6 +152,7 @@ public class Initialization {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.LINK_GUN, 3, 0.75, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.BIO_RIFLE, 2, 0.3, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.BIO_RIFLE, 2, 0.3, false));
+        wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 1, 0.5, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 1, 0.2, false));
     }
 }
