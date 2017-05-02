@@ -9,6 +9,7 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Senses;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.WeaponPref;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType.Category;
@@ -31,10 +32,7 @@ public class Engage extends Behavior {
     Weaponry weaponry;
     Items items;
     AgentInfo info;
-
-    public Engage(Repliquant bot) {
-        super(bot);
-    }
+    IUT2004Navigation navigation;
 
     public void setRayRight(AutoTraceRay ray) {
         this.right = ray;
@@ -68,54 +66,56 @@ public class Engage extends Behavior {
         this.bottomBack = ray;
     }
 
-    private void initVars() {
-        Repliquant bot = getBot();
-        shoot = bot.getShoot();
-        random = bot.getRandom();
-        move = bot.getMove();
-        location = bot.getTarget().getLocation();
-        weaponPref = bot.getCurrentWeapon();
-        senses = bot.getSenses();
-        weaponry = bot.getWeaponry();
-        items = bot.getItems();
-        info = bot.getInfo();
+    private void initVars(Repliquant unBot) {
+        shoot = unBot.getShoot();
+        random = unBot.getRandom();
+        move = unBot.getMove();
+        location = unBot.getTarget().getLocation();
+        weaponPref = unBot.getCurrentWeapon();
+        senses = unBot.getSenses();
+        weaponry = unBot.getWeaponry();
+        items = unBot.getItems();
+        info = unBot.getInfo();
+        if (unBot.getNMNav().isAvailable())
+            navigation = unBot.getNMNav();
+        else
+            navigation = unBot.getNavigation();
     }
 
     @Override
-    public void performs() {
-        initVars();
+    public void performs(Repliquant unBot) {
+        initVars(unBot);
         double distance;
         boolean choix;
-        Repliquant bot = getBot();
         if (location != null) {
-            distance = location.getDistance(bot.getBot().getLocation());
+            distance = location.getDistance(unBot.getBot().getLocation());
             if (distance > 4000 && weaponry.hasAmmoForWeapon((UT2004ItemType.LIGHTNING_GUN))) {
                 shoot.changeWeapon(UT2004ItemType.LIGHTNING_GUN);
                 navigation.stopNavigation();
                 shoot.shoot(location);
-                bot.getAct().act(new SetCrouch(true));
+                unBot.getAct().act(new SetCrouch(true));
             } else if (distance > 700) {
                 navigation.navigate(location);
             } else if (distance < 300 && !back.isResult() && !bottomBack.isResult()) {
                 moveBackwards();
             } else {
                 do {
-                    choix = choixAction();
+                    choix = choixAction(unBot);
                 } while (!choix);
             }
             alea = new Location(location.x + distance / 5000 + random.nextDouble(), location.y + distance / 5000 + random.nextDouble(), location.z + distance / 5000 + random.nextDouble());
-            if (bot.getInfo().getCurrentWeaponName().equals("ShockRifle") && (random.nextInt(10) % 3 == 0)) {
+            if (unBot.getInfo().getCurrentWeaponName().equals("ShockRifle") && (random.nextInt(10) % 3 == 0)) {
                 shockRifle();
             } else {
-                if ((bot.getCurrentWeapon().isUsingPrimary()
-                        && !(weaponry.hasPrimaryWeaponAmmo(bot.getCurrentWeapon().getWeapon())))
-                        || (!(bot.getCurrentWeapon().isUsingPrimary())
-                        && !(weaponry.hasSecondaryWeaponAmmo(bot.getCurrentWeapon().getWeapon())))) {
-                    bot.chooseWeapon();
-                    weaponPref = bot.getCurrentWeapon();
+                if ((unBot.getCurrentWeapon().isUsingPrimary()
+                        && !(weaponry.hasPrimaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))
+                        || (!(unBot.getCurrentWeapon().isUsingPrimary())
+                        && !(weaponry.hasSecondaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))) {
+                    unBot.chooseWeapon();
+                    weaponPref = unBot.getCurrentWeapon();
                 }
                 if (weaponPref == null) {
-                    noAmmo();
+                    noAmmo(unBot);
                 } else {
                     shoot.shoot(new WeaponPref(weaponPref.getWeapon(), weaponPref.isUsingPrimary()), alea);
                 }
@@ -143,11 +143,10 @@ public class Engage extends Behavior {
         }
     }
 
-    private boolean choixAction() {
-        Repliquant bot = getBot();
+    private boolean choixAction(Repliquant unBot) {
         int action = random.nextInt(100);
         boolean result = false;
-        bot.getConfig().setSpeedMultiplier(0.7f);
+        unBot.getConfig().setSpeedMultiplier(0.7f);
         navigation.stopNavigation();
         if (action < 2 || action > 98) {
             move.jump();
@@ -167,16 +166,16 @@ public class Engage extends Behavior {
         } else if (action >= 45 && action <= 55) {
             result = true;
         }
-        bot.getConfig().setSpeedMultiplier(1.0f);
+        unBot.getConfig().setSpeedMultiplier(1.0f);
         return (result);
     }
 
-    private void noAmmo() {
+    private void noAmmo(Repliquant unBot) {
         Item weapon = items.getPathNearestSpawnedItem(Category.WEAPON);
         Item ammo = items.getPathNearestSpawnedItem(Category.AMMO);
         Item selectedItem = null;
         if (ammo != null && weapon != null) {
-            if (weaponry.hasWeapon(weaponry.getWeaponForAmmo(ammo.getType())) && (getBot().getFwMap().getDistance(info.getNearestNavPoint(), ammo.getNavPoint()) < getBot().getFwMap().getDistance(info.getNearestNavPoint(), weapon.getNavPoint()))) {
+            if (weaponry.hasWeapon(weaponry.getWeaponForAmmo(ammo.getType())) && (unBot.getFwMap().getDistance(info.getNearestNavPoint(), ammo.getNavPoint()) < unBot.getFwMap().getDistance(info.getNearestNavPoint(), weapon.getNavPoint()))) {
                 selectedItem = ammo;
             } else {
                 selectedItem = weapon;
@@ -187,7 +186,7 @@ public class Engage extends Behavior {
             selectedItem = ammo;
         }
         if (senses.seeIncomingProjectile() || senses.isShot()) {
-            getBot().getBody().getCommunication().sendGlobalTextMessage("see projectile");
+            unBot.getBody().getCommunication().sendGlobalTextMessage("see projectile");
             shoot.changeWeaponNow(UT2004ItemType.SHIELD_GUN);
             if (senses.getLastIncomingProjectile() != null) {
                 navigation.setFocus(senses.getLastIncomingProjectile().getLocation());

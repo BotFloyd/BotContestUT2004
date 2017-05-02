@@ -53,12 +53,12 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
-        pursue = new Pursue(this);
-        collect = new Collect(this);
-        engage = new Engage(this);
-        defense = new Defense(this);
-        travel = new Travel(this);
-        dodge = new Dodge(this);
+        pursue = new Pursue();
+        collect = new Collect();
+        engage = new Engage();
+        defense = new Defense();
+        travel = new Travel();
+        dodge = new Dodge();
         initialization = new Initialization(this);
         tabooItems = new TabooSet(bot);
         initialization.raycastingInit();
@@ -119,7 +119,7 @@ public class Repliquant extends UT2004BotModuleController {
             shoot.stopShooting();
             now = collect;
         }
-        now.performs();
+        now.performs(this);
     }
 
     private void cheatArme() {

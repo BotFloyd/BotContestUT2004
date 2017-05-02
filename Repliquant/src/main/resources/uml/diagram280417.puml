@@ -132,27 +132,7 @@ class state.concrete.Pursue {
 class state.concrete.Travel {
     + void performs()
 }
-state.Behavior ..> main.Repliquant
-main.Repliquant ..> state.Behavior
-main.Repliquant ..> settings.Parameters
-main.Repliquant ..> settings.WeaponPreferences
-main.Repliquant ..> state.concrete.Collect
-main.Repliquant ..> state.concrete.Defense
-main.Repliquant ..> state.concrete.Dodge
-main.Repliquant ..> state.concrete.Engage
-main.Repliquant ..> state.concrete.Pursue
-main.Repliquant ..> state.concrete.Travel
-state.concrete.Collect --|> state.Behavior
-state.concrete.Collect ..> main.Repliquant
-state.concrete.Defense --|> state.Behavior
-state.concrete.Defense ..> main.Repliquant
-state.concrete.Dodge --|> state.Behavior
-state.concrete.Dodge ..> main.Repliquant
-state.concrete.Engage --|> state.Behavior
-state.concrete.Engage ..> main.Repliquant
-state.concrete.Engage ..> settings.WeaponPreferences
-state.concrete.Pursue --|> state.Behavior
-state.concrete.Pursue ..> main.Repliquant
-state.concrete.Travel --|> state.Behavior
-state.concrete.Travel ..> main.Repliquant
+main.Repliquant o-- state.Behavior
+state.Behavior o-- main.Repliquant
+
 @enduml

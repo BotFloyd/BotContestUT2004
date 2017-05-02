@@ -14,21 +14,16 @@ public class Dodge extends Behavior{
     Senses senses;
     AgentInfo info;
     AdvancedLocomotion move;
-
-    public Dodge(Repliquant unBot) {
-        super(unBot);
-    }
     
-    private void initVars() {
-        Repliquant bot = getBot();
-        senses = bot.getSenses();
-        info = bot.getInfo();
-        move = bot.getMove();
+    private void initVars(Repliquant unBot) {
+        senses = unBot.getSenses();
+        info = unBot.getInfo();
+        move = unBot.getMove();
     }
     
     @Override
-    public void performs() {
-        initVars();
+    public void performs(Repliquant unBot) {
+        initVars(unBot);
         IncomingProjectile projectile = senses.getLastIncomingProjectile();
         if(projectile != null){
             if(projectile.isVisible()){

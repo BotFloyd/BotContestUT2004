@@ -7,6 +7,7 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentInfo;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.NavPoints;
 import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 import java.util.HashMap;
@@ -20,23 +21,24 @@ public class Collect extends Behavior {
     NavPoints nav;
     Map<UT2004ItemType, Double> groupPriority = new HashMap(); 
     TabooSet<Item> tabooItems;
+    IUT2004Navigation navigation;
     
-    public Collect(Repliquant unBot) {
-        super(unBot);
-    }
 
-    private void initVars(){
-        Repliquant bot = getBot();
-        items = bot.getItems();
-        info = bot.getInfo();
-        weaponry = bot.getWeaponry();
-        nav = bot.getNavPoints();
-        tabooItems = bot.getTabooItems();
+    private void initVars(Repliquant unBot){
+        items = unBot.getItems();
+        info = unBot.getInfo();
+        weaponry = unBot.getWeaponry();
+        nav = unBot.getNavPoints();
+        tabooItems = unBot.getTabooItems();
+        if (unBot.getNMNav().isAvailable())
+            navigation = unBot.getNMNav();
+        else
+            navigation = unBot.getNavigation();
     }
     
     @Override
-    public void performs() {
-        initVars();
+    public void performs(Repliquant unBot) {
+        initVars(unBot);
         if(! navigation.isNavigating()){ 
             Item selectedItem = null;
             Double highestPriority = 0.0;
@@ -45,7 +47,7 @@ public class Collect extends Behavior {
             if(!items.getSpawnedItems().values().isEmpty()){
                 for (Item item : tabooItems.filter(items.getSpawnedItems().values())) {
                     if(groupPriority.containsKey(item.getType()) && (groupPriority.get(item.getType()) > 0)){
-                        priority = groupPriority.get(item.getType()) * 200 - getBot().getFwMap().getDistance(info.getNearestNavPoint(), item.getNavPoint());
+                        priority = groupPriority.get(item.getType()) * 200 - unBot.getFwMap().getDistance(info.getNearestNavPoint(), item.getNavPoint());
                         if(priority == highestPriority){
                             if (selectedItem == null || (groupPriority.get(item.getType()) > groupPriority.get((UT2004ItemType)selectedItem.getType()))){
                                 selectedItem = item;

@@ -10,19 +10,15 @@ public class Defense extends Behavior {
     AdvancedLocomotion move;
     Players players;
 
-    public Defense(Repliquant bot) {
-        super(bot);
-    }
 
-    private void initVars() {
-        Repliquant bot = getBot();
-        move = bot.getMove();
-        players = bot.getPlayers();
+    private void initVars(Repliquant unBot) {
+        move = unBot.getMove();
+        players = unBot.getPlayers();
     }
     
     @Override
-    public void performs() {
-        initVars();
+    public void performs(Repliquant unBot) {
+        initVars(unBot);
         if (!(players.canSeeEnemies())) {
             move.turnHorizontal(180);
         }
