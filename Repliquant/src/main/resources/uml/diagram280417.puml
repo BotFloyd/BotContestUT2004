@@ -1,22 +1,8 @@
 @startuml
-abstract class state.Behavior {
-    - Repliquant unBot
-    # IUT2004Navigation navigation
-    + {abstract} void performs()
-    + Repliquant getBot()
-}
+
 class main.Repliquant {
-    - Behavior now
-    - Pursue pursue
-    - Collect collect
-    - Engage engage
-    - Defense defense
-    - Travel travel
-    - Dodge dodge
-    - Initialization initialization
     - Player target
     - List<WeaponPreferences> wPrefs
-    - WeaponPreferences currentWeapon
     - UT2004PathAutoFixer autoFixer
     - int mort, kill, risque
     - Item nearbyObj
@@ -38,16 +24,17 @@ class main.Repliquant {
     + {static} void main(String args[])
     - void cheatArme()
 }
+
 class settings.Initialization {
-    - Repliquant bot
     - boolean navMeshDrawn, offMeshLinksDrawn
-    + void raycastingInit()
-    + void navigationInit()
-    + boolean drawNavMesh()
-    + boolean drawOffMeshLinks()
+    + void raycastingInit(Repliquant unBot)
+    + void navigationInit(Repliquant unBot)
+    + boolean drawNavMesh(Repliquant unBot)
+    + boolean drawOffMeshLinks(Repliquant unBot)
     + void wPrefsInit (List <WeaponPreferences> wPrefs)
     - void pathExecutorStateChange(IPathExecutorState event)
 }
+
 class settings.Parameters {
     ~ UT2004BotParameters params
     - String botSkin
@@ -60,6 +47,7 @@ class settings.Parameters {
     + int getSkillLevel()
     + Initialize initialize()
 }
+
 class settings.WeaponPreferences {
     - UT2004ItemType weapon
     - double weight
@@ -75,64 +63,90 @@ class settings.WeaponPreferences {
     + void upNbKills()
     + void upNbDeaths()
 }
-class state.concrete.Collect {
-    ~ Items items
-    ~ AgentInfo info
-    ~ Weaponry weaponry
-    ~ NavPoints nav
-    ~ Map<UT2004ItemType, Double> groupPriority
-    ~ TabooSet<Item> tabooItems
-    + void performs()
-    - void initVars()
-    - void updateGroupPriority()
-}
-class state.concrete.Defense {
-    ~ AdvancedLocomotion move
-    ~ Players players
-    + void performs()
-    - void initVars()
-}
-class state.concrete.Dodge {
-    ~ Senses senses
-    ~ AgentInfo info
-    ~ AdvancedLocomotion move
-    + void performs()
-    - void initVars()
-}
-class state.concrete.Engage {
-    ~ ImprovedShooting shoot
-    ~ Random random
-    ~ AdvancedLocomotion move
-    ~ Location location, alea
-    ~ Senses senses
-    ~ AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2, back, bottomBack
-    ~ WeaponPreferences weaponPref
-    ~ Weaponry weaponry
-    ~ Items items
-    ~ AgentInfo info
-    + void setRayRight(AutoTraceRay ray)
-    + void setRayLeft(AutoTraceRay ray)
-    + void setRayBottomLeft(AutoTraceRay ray)
-    + void setRayBottomRight(AutoTraceRay ray)
-    + void setRayBottomLeft2(AutoTraceRay ray)
-    + void setRayBottomRight2(AutoTraceRay ray)
-    + void setRayBack(AutoTraceRay ray)
-    + void setRayBottomBack(AutoTraceRay ray)
-    + void performs()
-    - void initVars()
-    - void moveBackwards()
-    - void shockRifle()
-    - boolean choixAction()
-    - void noAmmo()
-}
-class state.concrete.Pursue {
-    ~ Player pursued
-    + void performs()
-}
-class state.concrete.Travel {
-    + void performs()
-}
-main.Repliquant o-- state.Behavior
-state.Behavior o-- main.Repliquant
 
+package state {
+    abstract class Behavior {
+        + {abstract} void performs(Repliquant unBot)
+    }
+    package concrete {
+        class Collect {
+            ~ Items items
+            ~ AgentInfo info
+            ~ Weaponry weaponry
+            ~ NavPoints nav
+            ~ Map<UT2004ItemType, Double> groupPriority
+            ~ TabooSet<Item> tabooItems
+            ~ IUT2004Navigation navigation
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+            - void updateGroupPriority()
+        }
+        class Defense {
+            ~ AdvancedLocomotion move
+            ~ Players players
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+        }
+        class Dodge {
+            ~ Senses senses
+            ~ AgentInfo info
+            ~ AdvancedLocomotion move
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+        }
+        class Engage {
+            ~ ImprovedShooting shoot
+            ~ Random random
+            ~ AdvancedLocomotion move
+            ~ Location location, alea
+            ~ Senses senses
+            ~ AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2, back, bottomBack
+            ~ WeaponPreferences weaponPref
+            ~ Weaponry weaponry
+            ~ Items items
+            ~ AgentInfo info
+            ~ IUT2004Navigation navigation
+            + void setRayRight(AutoTraceRay ray)
+            + void setRayLeft(AutoTraceRay ray)
+            + void setRayBottomLeft(AutoTraceRay ray)
+            + void setRayBottomRight(AutoTraceRay ray)
+            + void setRayBottomLeft2(AutoTraceRay ray)
+            + void setRayBottomRight2(AutoTraceRay ray)
+            + void setRayBack(AutoTraceRay ray)
+            + void setRayBottomBack(AutoTraceRay ray)
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+            - void moveBackwards()
+            - void shockRifle()
+            - boolean choixAction(Repliquant unBot)
+            - void noAmmo(Repliquant unBot)
+        }
+        class Pursue {
+            ~ Player pursued
+            ~ Navigation navigation
+            + void performs(Repliquant unBot)
+        }
+        class Travel {
+            ~ Navigation navigation
+            + void performs(Repliquant unBot)
+        }
+    }
+}
+
+main.Repliquant o-- Behavior
+main.Repliquant o-- Collect
+main.Repliquant o-- Defense
+main.Repliquant o-- Dodge
+main.Repliquant o-- Engage
+main.Repliquant o-- Pursue
+main.Repliquant o-- Travel
+main.Repliquant o-- settings.Initialization
+main.Repliquant o-- settings.WeaponPreferences
+main.Repliquant <.. settings.Parameters
+Behavior <|-- Collect
+Behavior <|-- Defense
+Behavior <|-- Dodge
+Behavior <|-- Engage
+Behavior <|-- Pursue
+Behavior <|-- Travel
 @enduml
