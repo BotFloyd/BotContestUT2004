@@ -64,7 +64,10 @@ public class Repliquant extends UT2004BotModuleController {
         initialization.raycastingInit();
         initialization.navigationInit();
         initialization.wPrefsInit(wPrefs);
-        autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
+        if (nmNav.isAvailable())
+            autoFixer = new UT2004PathAutoFixer(bot, nmNav.getPathExecutor(), fwMap, aStar, navBuilder);
+        else
+            autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
     }
 
     @Override
