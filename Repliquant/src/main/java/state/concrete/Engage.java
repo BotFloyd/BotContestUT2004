@@ -151,19 +151,21 @@ public class Engage extends Behavior {
         if (action < 2 || action > 98) {
             move.jump();
         }
-        if (!left.isResult() && bottomLeft.isResult() && action < 45) {
+        if (!left.isResult() && bottomLeft.isResult() && action < 40) {
             move.strafeLeft(200, location);
             result = true;
             if ((action < 2 || action > 98) && bottomLeft2.isResult()) {
                 move.jump();
             }
-        } else if (!right.isResult() && bottomRight.isResult() && action > 55) {
+        } else if (!right.isResult() && bottomRight.isResult() && action > 60) {
             move.strafeRight(200, location);
             result = true;
             if ((action < 2 || action > 98) && bottomRight2.isResult()) {
                 move.jump();
             }
-        } else if (action >= 45 && action <= 55) {
+        } else if (!back.isResult() && !bottomBack.isResult() && action >= 40 && action < 50) {
+                moveBackwards();
+        } else if (action >= 50 && action <= 60) {
             result = true;
         }
         unBot.getConfig().setSpeedMultiplier(1.0f);
