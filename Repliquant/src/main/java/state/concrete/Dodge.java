@@ -25,12 +25,12 @@ public class Dodge extends Behavior{
     @Override
     public void performs(Repliquant unBot) {
         initVars(unBot);
+        long reaction = System.currentTimeMillis() + 300;
+        while(System.currentTimeMillis() < reaction){
+            unBot.getLog().info("Time Reaction");
+        }
         IncomingProjectile projectile = senses.getLastIncomingProjectile();
         if(projectile != null){
-            long reaction = System.currentTimeMillis() + 300;
-            while(System.currentTimeMillis() < reaction){
-                unBot.getLog().info("Time Reaction");
-            }
             if(projectile.isVisible() && isDangerous(projectile)){
                 if(unBot.getRandom().nextDouble() <= 0.5)
                     move.dodgeLeft(projectile.getLocation(),false);
