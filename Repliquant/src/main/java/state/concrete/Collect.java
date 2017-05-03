@@ -86,8 +86,12 @@ public class Collect extends Behavior {
         } else {
             groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 0.0);
         }
-
-        groupPriority.put(UT2004ItemType.REDEEMER, 100.0);
+        
+        if (weaponry.isLoaded(UT2004ItemType.REDEEMER))
+            groupPriority.put(UT2004ItemType.REDEEMER, 100.0);
+        
+        if (weaponry.isLoaded(UT2004ItemType.ION_PAINTER))
+            groupPriority.put(UT2004ItemType.ION_PAINTER, 100.0);
 
         if (weaponry.isLoaded(UT2004ItemType.ROCKET_LAUNCHER)) {
             if (weaponry.hasWeapon(UT2004ItemType.ROCKET_LAUNCHER)) {

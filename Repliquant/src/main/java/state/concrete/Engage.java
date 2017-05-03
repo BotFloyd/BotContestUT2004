@@ -104,20 +104,24 @@ public class Engage extends Behavior {
                 } while (!choix);
             }
             alea = new Location(location.x + distance / 5000 + random.nextDouble(), location.y + distance / 5000 + random.nextDouble(), location.z + distance / 5000 + random.nextDouble());
-            if (unBot.getInfo().getCurrentWeaponName().equals("ShockRifle") && (random.nextInt(10) % 3 == 0)) {
-                shockRifle();
+            if ((unBot.getCurrentWeapon().isUsingPrimary()
+                    && !(weaponry.hasPrimaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))
+                    || (!(unBot.getCurrentWeapon().isUsingPrimary())
+                    && !(weaponry.hasSecondaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))) {
+                unBot.chooseWeapon();
+                weaponPref = unBot.getCurrentWeapon();
+            }
+            if (weaponPref == null) {
+                noAmmo(unBot);
             } else {
-                if ((unBot.getCurrentWeapon().isUsingPrimary()
-                        && !(weaponry.hasPrimaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))
-                        || (!(unBot.getCurrentWeapon().isUsingPrimary())
-                        && !(weaponry.hasSecondaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))) {
-                    unBot.chooseWeapon();
-                    weaponPref = unBot.getCurrentWeapon();
-                }
-                if (weaponPref == null) {
-                    noAmmo(unBot);
+                UT2004ItemType weapon = weaponPref.getWeapon();
+                if (weapon.equals(UT2004ItemType.SHOCK_RIFLE) && random.nextBoolean()) {
+                    shockRifle();
+                } else if (weapon.equals(UT2004ItemType.ROCKET_LAUNCHER) || weapon.equals(UT2004ItemType.BIO_RIFLE)) {
+                    alea = new Location(alea.x, alea.y, location.z - 80);
+                    shoot.shoot(new WeaponPref(weapon, weaponPref.isUsingPrimary()), alea);
                 } else {
-                    shoot.shoot(new WeaponPref(weaponPref.getWeapon(), weaponPref.isUsingPrimary()), alea);
+                    shoot.shoot(new WeaponPref(weapon, weaponPref.isUsingPrimary()), alea);
                 }
             }
         } else {
