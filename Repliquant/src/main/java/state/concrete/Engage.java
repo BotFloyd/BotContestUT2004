@@ -164,6 +164,7 @@ public class Engage extends Behavior {
                 move.jump();
             }
         } else if (!right.isResult() && bottomRight.isResult() && action > 60) {
+            move.strafeRight(200 + random.nextInt(100), location);
             result = true;
             if (action > 98 && bottomRight2.isResult()) {
                 move.jump();
