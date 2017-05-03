@@ -92,6 +92,7 @@ package state {
             ~ AgentInfo info
             ~ AdvancedLocomotion move
             + void performs(Repliquant unBot)
+            - boolean isDangerous(IncomingProjectile projectile)
             - void initVars(Repliquant unBot)
         }
         class Engage {
@@ -122,12 +123,9 @@ package state {
             - void noAmmo(Repliquant unBot)
         }
         class Pursue {
-            ~ Player pursued
-            ~ Navigation navigation
             + void performs(Repliquant unBot)
         }
         class Travel {
-            ~ Navigation navigation
             + void performs(Repliquant unBot)
         }
     }
