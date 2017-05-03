@@ -7,11 +7,10 @@ import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 
 public class Travel extends Behavior {
-    
-    IUT2004Navigation navigation;
-    
+        
     @Override
     public void performs(Repliquant unBot) {
+        IUT2004Navigation navigation;
         if (unBot.getNMNav().isAvailable())
             navigation = unBot.getNMNav();
         else

@@ -89,11 +89,8 @@ public class Engage extends Behavior {
         boolean choix;
         if (location != null) {
             distance = location.getDistance(unBot.getBot().getLocation());
-            if (distance > 4000 && weaponry.hasAmmoForWeapon((UT2004ItemType.LIGHTNING_GUN))) {
-                shoot.changeWeapon(UT2004ItemType.LIGHTNING_GUN);
-                navigation.stopNavigation();
-                shoot.shoot(location);
-                unBot.getAct().act(new SetCrouch(true));
+            if (distance > 4000 && (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN) || weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER) || weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER))) {
+                shootFarAway(unBot);
             } else if (distance > 700) {
                 navigation.navigate(location);
             } else if (distance < 300 && !back.isResult() && !bottomBack.isResult()) {
@@ -208,6 +205,23 @@ public class Engage extends Behavior {
             shoot.changeWeaponNow(UT2004ItemType.SHIELD_GUN);
             shoot.shoot();
             navigation.navigate(location);
+        }
+    }
+
+    private void shootFarAway(Repliquant unBot) {
+        if (weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER)){
+            shoot.changeWeaponNow(UT2004ItemType.REDEEMER);
+            navigation.stopNavigation();
+            shoot.shoot(new Location(location.x, location.y, location.z - 80));
+        } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER)){
+            shoot.changeWeaponNow(UT2004ItemType.REDEEMER);
+            navigation.stopNavigation();
+            shoot.shoot(new Location(location.x, location.y, location.z - 80));
+        } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN)) {  
+            shoot.changeWeaponNow(UT2004ItemType.LIGHTNING_GUN);
+            navigation.stopNavigation();
+            unBot.getAct().act(new SetCrouch(true));
+            shoot.shoot(location);
         }
     }
 }
