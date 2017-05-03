@@ -142,7 +142,7 @@ public class Initialization {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.55, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.SNIPER_RIFLE, 8, 0.7, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.FLAK_CANNON, 7, 0.7, true));
-        wPrefs.add(new WeaponPreferences(UT2004ItemType.FLAK_CANNON, 1, 0.2, false));
+        wPrefs.add(new WeaponPreferences(UT2004ItemType.FLAK_CANNON, 5, 0.1, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.MINIGUN, 6, 0.6, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.MINIGUN, 6, 0.55, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.LIGHTNING_GUN, 5, 0.5, true));
@@ -153,6 +153,6 @@ public class Initialization {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.BIO_RIFLE, 2, 0.3, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.BIO_RIFLE, 2, 0.3, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 1, 0.5, true));
-        wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 1, 0.2, false));
+        wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 5, 0.1, false));
     }
 }

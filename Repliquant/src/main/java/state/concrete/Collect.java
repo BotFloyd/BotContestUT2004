@@ -71,23 +71,23 @@ public class Collect extends Behavior {
 
     private void updateGroupPriority() {
 
-        groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 2.0 * (199 - info.getHealth()) / 199);
-        groupPriority.put(UT2004ItemType.HEALTH_PACK, 8.0 * (100 - info.getHealth()) / 100);
-        groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 8.0 * (199 - info.getHealth()) / 199);
-        groupPriority.put(UT2004ItemType.SHIELD_PACK, 5.0 * (50 - info.getLowArmor()) / 50);
-        groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 8.0 * (100 - info.getHighArmor()) / 100);
+        groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 2.0 * (199 - info.getHealth()) / 199.0);
+        groupPriority.put(UT2004ItemType.HEALTH_PACK, 8.0 * (100 - info.getHealth()) / 100.0);
+        groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 8.0 * (199 - info.getHealth()) / 199.0);
+        groupPriority.put(UT2004ItemType.SHIELD_PACK, 5.0 * (50 - info.getLowArmor()) / 50.0);
+        groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 8.0 * (100 - info.getHighArmor()) / 100.0);
 
         if (weaponry.hasLoadedWeapon()) {
             if (info.getRemainingUDamageTime() < 0) {
                 groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 5.0);
             } else {
-                groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 3.0 * (27 - info.getRemainingUDamageTime()) / 27);
+                groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 3.0 * (27 - info.getRemainingUDamageTime()) / 27.0);
             }
         } else {
             groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 0.0);
         }
-        
-        groupPriority.put(UT2004ItemType.REDEEMER, 999.0);         
+
+        groupPriority.put(UT2004ItemType.REDEEMER, 999.0);
         groupPriority.put(UT2004ItemType.ION_PAINTER, 999.0);
 
         if (weaponry.hasWeapon(UT2004ItemType.ROCKET_LAUNCHER)) {

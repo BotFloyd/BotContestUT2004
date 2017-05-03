@@ -13,6 +13,7 @@ import state.concrete.Travel;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEventListener;
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
+import cz.cuni.amis.pogamut.unreal.communication.messages.UnrealId;
 import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
@@ -28,10 +29,12 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.InitedM
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerKilled;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.PlayerScore;
 import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
 import cz.cuni.amis.utils.exception.PogamutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Repliquant extends UT2004BotModuleController {
 
@@ -47,9 +50,10 @@ public class Repliquant extends UT2004BotModuleController {
     private final List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
     private WeaponPreferences currentWeapon;
     private UT2004PathAutoFixer autoFixer;
-    private int mort = 0, kill = 0, risque;
+    private double risque = 0;
     private Item nearbyObj;
     private TabooSet<Item> tabooItems;
+    private boolean canPursue = false;
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
@@ -64,20 +68,21 @@ public class Repliquant extends UT2004BotModuleController {
         initialization.raycastingInit(this);
         initialization.navigationInit(this);
         initialization.wPrefsInit(wPrefs);
-        if (nmNav.isAvailable())
+        if (nmNav.isAvailable()) {
             autoFixer = new UT2004PathAutoFixer(bot, nmNav.getPathExecutor(), fwMap, aStar, navBuilder);
-        else
+        } else {
             autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
+        }
     }
 
     @Override
     public Initialize getInitializeCommand() {
         return (new Parameters().setParams(bot.getParams()).initialize());
     }
-    
+
     @Override
     public void mapInfoObtained() {
-    	navMeshModule.setReloadNavMesh(true);	
+        navMeshModule.setReloadNavMesh(true);
     }
 
     @Override
@@ -86,37 +91,44 @@ public class Repliquant extends UT2004BotModuleController {
         wPrefs.add(currentWeapon);
         getWorldView().addObjectListener(Player.class, WorldObjectAppearedEvent.class, playerAppeared);
     }
-    
+
     @Override
     public void logic() throws PogamutException {
         if (nmNav.isAvailable()) {
-            if (!initialization.drawNavMesh(this)) return;
-            if (!initialization.drawOffMeshLinks(this)) return;
+            if (!initialization.drawNavMesh(this)) {
+                return;
+            }
+            if (!initialization.drawOffMeshLinks(this)) {
+                return;
+            }
         }
         nearbyObj = items.getNearestVisibleItem();
-        if (nearbyObj != null && tabooItems.isTaboo(nearbyObj))
+        if (nearbyObj != null && tabooItems.isTaboo(nearbyObj)) {
             nearbyObj = null;
+        }
         if (players.canSeeEnemies()) {
             if (target == null || !target.isVisible()) {
                 target = players.getNearestVisibleEnemy();
             }
             bot.getBotName().setInfo("ENGAGE");
             now = engage;
+            canPursue = true;
         } else if (senses.isBeingDamaged()) {
             bot.getBotName().setInfo("DEFENSE");
             now = defense;
-        } else if (target == null && senses.seeIncomingProjectile()){
+        } else if (target == null && senses.seeIncomingProjectile()) {
             bot.getBotName().setInfo("DODGE");
             now = dodge;
+        } else if (target != null && weaponry.hasLoadedRangedWeapon() && (risque >= 0 || canPursue)) {
+            bot.getBotName().setInfo("PURSUE");
+            shoot.stopShooting();
+            canPursue = false;
+            now = pursue;
         } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 300) {
             bot.getBotName().setInfo("TRAVEL");
             shoot.stopShooting();
             now = travel;
             tabooItems.add(nearbyObj, items.getItemRespawnTime(nearbyObj));
-        } else if (target != null && weaponry.hasLoadedRangedWeapon()) {
-            bot.getBotName().setInfo("PURSUE");
-            shoot.stopShooting();
-            now = pursue;
         } else {
             bot.getBotName().setInfo("COLLECT");
             shoot.stopShooting();
@@ -128,15 +140,18 @@ public class Repliquant extends UT2004BotModuleController {
     private void cheatArme() {
         UT2004ItemType arme = UT2004ItemType.SHOCK_RIFLE;
         UT2004ItemType munition = UT2004ItemType.SHOCK_RIFLE_AMMO;
-        if (!weaponry.hasWeapon(arme))
+        if (!weaponry.hasWeapon(arme)) {
             getAct().act(new AddInventory().setType(arme.getName()));
-        if (!weaponry.hasLoadedWeapon(arme))
+        }
+        if (!weaponry.hasLoadedWeapon(arme)) {
             getAct().act(new AddInventory().setType(munition.getName()));
-        if (weaponry.getCurrentWeapon().getType() != arme)
+        }
+        if (weaponry.getCurrentWeapon().getType() != arme) {
             weaponry.changeWeapon(arme);
+        }
     }
-    
-     IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>> playerAppeared = new IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>>() {
+
+    IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>> playerAppeared = new IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>>() {
         @Override
         public void notify(WorldObjectAppearedEvent<Player> event) {
             chooseWeapon();
@@ -145,37 +160,41 @@ public class Repliquant extends UT2004BotModuleController {
 
     @EventListener(eventClass = PlayerKilled.class)
     public void playerKilled(PlayerKilled event) {
-        body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + risque);
         if (event.getKiller().equals(info.getId())) {
-            kill++;
-            risque = mort - kill;
+            updateRisque();
             shoot.stopShooting();
-            currentWeapon.upNbKills();
-            currentWeapon.updateProbability();
+            if (currentWeapon != null) {
+                currentWeapon.upNbKills();
+                currentWeapon.updateProbability();
+            }
             target = null;
             bot.getBotName().setInfo("COLLECT");
             now = collect;
+            canPursue = false;
+            body.getCommunication().sendGlobalTextMessage("courage : " + risque);
         }
     }
-    
+
     @EventListener(eventClass = BotDamaged.class)
     public void botDamaged(BotDamaged event) {
-        
+
     }
 
     @Override
     public void botKilled(BotKilled event) {
-        mort++;
-        risque = mort - kill;
-        currentWeapon.upNbDeaths();
-        currentWeapon.updateProbability();
+        updateRisque();
+        if (currentWeapon != null && !event.isCausedByWorld()) {
+            currentWeapon.upNbDeaths();
+            currentWeapon.updateProbability();
+        }
         for (int i = 0; i < wPrefs.size(); i++) {
             WeaponPreferences prefWeap = wPrefs.get(i);
             if (prefWeap.getWeapon().equals(UT2004ItemType.ASSAULT_RIFLE) && prefWeap.isUsingPrimary() == true) {
                 currentWeapon = prefWeap;
             }
         }
-        body.getCommunication().sendGlobalTextMessage("mort : " + mort + " kill : " + kill + " courage : " + risque);
+        canPursue = false;
+        body.getCommunication().sendGlobalTextMessage("courage : " + risque);
     }
 
     public void chooseWeapon() {
@@ -210,15 +229,30 @@ public class Repliquant extends UT2004BotModuleController {
         }
     }
 
+    private void updateRisque() {
+        int maxKills = 0;
+        int kills;
+        for (Map.Entry<UnrealId, PlayerScore> playerScore : game.getPlayerScores().entrySet()) {
+            if (!playerScore.getKey().equals(info.getId())) {
+                kills = playerScore.getValue().getScore();
+                if (maxKills < kills) {
+                    maxKills = kills;
+                }
+            }
+        }
+        risque = (maxKills - info.getKills()) / (game.getFragLimit() * 1.0);
+        body.getCommunication().sendGlobalTextMessage("maxKills : " + maxKills + " getKills : " + info.getKills() + " getFragLimit : " + game.getFragLimit());
+    }
+
     public Player getTarget() {
         return target;
     }
-    
+
     public Engage getEngage() {
         return engage;
     }
-    
-    public TabooSet<Item> getTabooItems () {
+
+    public TabooSet<Item> getTabooItems() {
         return tabooItems;
     }
 

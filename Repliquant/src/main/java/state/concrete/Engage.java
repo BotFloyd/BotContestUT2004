@@ -76,10 +76,11 @@ public class Engage extends Behavior {
         weaponry = unBot.getWeaponry();
         items = unBot.getItems();
         info = unBot.getInfo();
-        if (unBot.getNMNav().isAvailable())
+        if (unBot.getNMNav().isAvailable()) {
             navigation = unBot.getNMNav();
-        else
+        } else {
             navigation = unBot.getNavigation();
+        }
     }
 
     @Override
@@ -101,12 +102,16 @@ public class Engage extends Behavior {
                 } while (!choix);
             }
             alea = new Location(location.x + distance / 5000 + random.nextDouble(), location.y + distance / 5000 + random.nextDouble(), location.z + distance / 5000 + random.nextDouble());
-            if ((unBot.getCurrentWeapon().isUsingPrimary()
-                    && !(weaponry.hasPrimaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))
-                    || (!(unBot.getCurrentWeapon().isUsingPrimary())
-                    && !(weaponry.hasSecondaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))) {
-                unBot.chooseWeapon();
-                weaponPref = unBot.getCurrentWeapon();
+            if (unBot.getCurrentWeapon() != null) {
+                if ((unBot.getCurrentWeapon().isUsingPrimary()
+                        && !(weaponry.hasPrimaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))
+                        || (!(unBot.getCurrentWeapon().isUsingPrimary())
+                        && !(weaponry.hasSecondaryWeaponAmmo(unBot.getCurrentWeapon().getWeapon())))) {
+                    unBot.chooseWeapon();
+                    weaponPref = unBot.getCurrentWeapon();
+                }
+            } else {
+                weaponPref = null;
             }
             if (weaponPref == null) {
                 noAmmo(unBot);
@@ -165,7 +170,7 @@ public class Engage extends Behavior {
                 move.jump();
             }
         } else if (!back.isResult() && !bottomBack.isResult() && action >= 40 && action < 50) {
-                moveBackwards();
+            moveBackwards();
         } else if (action >= 50 && action <= 60) {
             result = true;
         }
@@ -209,15 +214,15 @@ public class Engage extends Behavior {
     }
 
     private void shootFarAway(Repliquant unBot) {
-        if (weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER)){
+        if (weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER)) {
             shoot.changeWeaponNow(UT2004ItemType.REDEEMER);
             navigation.stopNavigation();
             shoot.shoot(new Location(location.x, location.y, location.z - 80));
-        } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER)){
+        } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER)) {
             shoot.changeWeaponNow(UT2004ItemType.ION_PAINTER);
             navigation.stopNavigation();
             shoot.shoot(new Location(location.x, location.y, location.z - 80));
-        } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN)) {  
+        } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN)) {
             shoot.changeWeaponNow(UT2004ItemType.LIGHTNING_GUN);
             navigation.stopNavigation();
             unBot.getAct().act(new SetCrouch(true));
