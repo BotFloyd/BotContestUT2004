@@ -87,90 +87,71 @@ public class Collect extends Behavior {
             groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 0.0);
         }
         
-        if (weaponry.isLoaded(UT2004ItemType.REDEEMER))
-            groupPriority.put(UT2004ItemType.REDEEMER, 100.0);
-        
-        if (weaponry.isLoaded(UT2004ItemType.ION_PAINTER))
-            groupPriority.put(UT2004ItemType.ION_PAINTER, 100.0);
+        groupPriority.put(UT2004ItemType.REDEEMER, 999.0);         
+        groupPriority.put(UT2004ItemType.ION_PAINTER, 999.0);
 
-        if (weaponry.isLoaded(UT2004ItemType.ROCKET_LAUNCHER)) {
-            if (weaponry.hasWeapon(UT2004ItemType.ROCKET_LAUNCHER)) {
-                groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER, 0.0);
-                groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER_AMMO, 10.0 * (weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.ROCKET_LAUNCHER)) / weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER, 10.0);
-                groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER_AMMO, 5.0 * (weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.ROCKET_LAUNCHER)) / weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.ROCKET_LAUNCHER)) {
+            groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER, 0.0);
+            groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER_AMMO, 10.0 * (weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.ROCKET_LAUNCHER)) / weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER, 10.0);
+            groupPriority.put(UT2004ItemType.ROCKET_LAUNCHER_AMMO, 5.0 * (weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.ROCKET_LAUNCHER)) / weaponry.getMaxAmmo(UT2004ItemType.ROCKET_LAUNCHER_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.SNIPER_RIFLE)) {
-            if (weaponry.hasWeapon(UT2004ItemType.SNIPER_RIFLE)) {
-                groupPriority.put(UT2004ItemType.SNIPER_RIFLE, 0.0);
-                groupPriority.put(UT2004ItemType.SNIPER_RIFLE_AMMO, 9.0 * (weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SNIPER_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.SNIPER_RIFLE, 9.0);
-                groupPriority.put(UT2004ItemType.SNIPER_RIFLE_AMMO, 4.5 * (weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SNIPER_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.SNIPER_RIFLE)) {
+            groupPriority.put(UT2004ItemType.SNIPER_RIFLE, 0.0);
+            groupPriority.put(UT2004ItemType.SNIPER_RIFLE_AMMO, 9.0 * (weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SNIPER_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.SNIPER_RIFLE, 9.0);
+            groupPriority.put(UT2004ItemType.SNIPER_RIFLE_AMMO, 4.5 * (weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SNIPER_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SNIPER_RIFLE_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.FLAK_CANNON)) {
-            if (weaponry.hasWeapon(UT2004ItemType.FLAK_CANNON)) {
-                groupPriority.put(UT2004ItemType.FLAK_CANNON, 0.0);
-                groupPriority.put(UT2004ItemType.FLAK_CANNON_AMMO, 8.0 * (weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.FLAK_CANNON)) / weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.FLAK_CANNON, 8.0);
-                groupPriority.put(UT2004ItemType.FLAK_CANNON_AMMO, 4.0 * (weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.FLAK_CANNON)) / weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.FLAK_CANNON)) {
+            groupPriority.put(UT2004ItemType.FLAK_CANNON, 0.0);
+            groupPriority.put(UT2004ItemType.FLAK_CANNON_AMMO, 8.0 * (weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.FLAK_CANNON)) / weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.FLAK_CANNON, 8.0);
+            groupPriority.put(UT2004ItemType.FLAK_CANNON_AMMO, 4.0 * (weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.FLAK_CANNON)) / weaponry.getMaxAmmo(UT2004ItemType.FLAK_CANNON_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.MINIGUN)) {
-            if (weaponry.hasWeapon(UT2004ItemType.MINIGUN)) {
-                groupPriority.put(UT2004ItemType.MINIGUN, 0.0);
-                groupPriority.put(UT2004ItemType.MINIGUN_AMMO, 7.0 * (weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.MINIGUN)) / weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.MINIGUN, 7.0);
-                groupPriority.put(UT2004ItemType.MINIGUN_AMMO, 3.5 * (weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.MINIGUN)) / weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.MINIGUN)) {
+            groupPriority.put(UT2004ItemType.MINIGUN, 0.0);
+            groupPriority.put(UT2004ItemType.MINIGUN_AMMO, 7.0 * (weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.MINIGUN)) / weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.MINIGUN, 7.0);
+            groupPriority.put(UT2004ItemType.MINIGUN_AMMO, 3.5 * (weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.MINIGUN)) / weaponry.getMaxAmmo(UT2004ItemType.MINIGUN_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.LIGHTNING_GUN)) {
-            if (weaponry.hasWeapon(UT2004ItemType.LIGHTNING_GUN)) {
-                groupPriority.put(UT2004ItemType.LIGHTNING_GUN, 0.0);
-                groupPriority.put(UT2004ItemType.LIGHTNING_GUN_AMMO, 6.0 * (weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LIGHTNING_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.LIGHTNING_GUN, 6.0);
-                groupPriority.put(UT2004ItemType.LIGHTNING_GUN_AMMO, 3.0 * (weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LIGHTNING_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.LIGHTNING_GUN)) {
+            groupPriority.put(UT2004ItemType.LIGHTNING_GUN, 0.0);
+            groupPriority.put(UT2004ItemType.LIGHTNING_GUN_AMMO, 6.0 * (weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LIGHTNING_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.LIGHTNING_GUN, 6.0);
+            groupPriority.put(UT2004ItemType.LIGHTNING_GUN_AMMO, 3.0 * (weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LIGHTNING_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LIGHTNING_GUN_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.SHOCK_RIFLE)) {
-            if (weaponry.hasWeapon(UT2004ItemType.SHOCK_RIFLE)) {
-                groupPriority.put(UT2004ItemType.SHOCK_RIFLE, 0.0);
-                groupPriority.put(UT2004ItemType.SHOCK_RIFLE_AMMO, 5.0 * (weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SHOCK_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.SHOCK_RIFLE, 5.0);
-                groupPriority.put(UT2004ItemType.SHOCK_RIFLE_AMMO, 2.5 * (weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SHOCK_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.SHOCK_RIFLE)) {
+            groupPriority.put(UT2004ItemType.SHOCK_RIFLE, 0.0);
+            groupPriority.put(UT2004ItemType.SHOCK_RIFLE_AMMO, 5.0 * (weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SHOCK_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.SHOCK_RIFLE, 5.0);
+            groupPriority.put(UT2004ItemType.SHOCK_RIFLE_AMMO, 2.5 * (weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.SHOCK_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.SHOCK_RIFLE_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.LINK_GUN)) {
-            if (weaponry.hasWeapon(UT2004ItemType.LINK_GUN)) {
-                groupPriority.put(UT2004ItemType.LINK_GUN, 0.0);
-                groupPriority.put(UT2004ItemType.LINK_GUN_AMMO, 4.0 * (weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LINK_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.LINK_GUN, 4.0);
-                groupPriority.put(UT2004ItemType.LINK_GUN_AMMO, 2.0 * (weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LINK_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.LINK_GUN)) {
+            groupPriority.put(UT2004ItemType.LINK_GUN, 0.0);
+            groupPriority.put(UT2004ItemType.LINK_GUN_AMMO, 4.0 * (weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LINK_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.LINK_GUN, 4.0);
+            groupPriority.put(UT2004ItemType.LINK_GUN_AMMO, 2.0 * (weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.LINK_GUN)) / weaponry.getMaxAmmo(UT2004ItemType.LINK_GUN_AMMO));
         }
 
-        if (weaponry.isLoaded(UT2004ItemType.BIO_RIFLE)) {
-            if (weaponry.hasWeapon(UT2004ItemType.BIO_RIFLE)) {
-                groupPriority.put(UT2004ItemType.BIO_RIFLE, 0.0);
-                groupPriority.put(UT2004ItemType.BIO_RIFLE_AMMO, 3.0 * (weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.BIO_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO));
-            } else {
-                groupPriority.put(UT2004ItemType.BIO_RIFLE, 3.0);
-                groupPriority.put(UT2004ItemType.BIO_RIFLE_AMMO, 1.5 * (weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.BIO_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO));
-            }
+        if (weaponry.hasWeapon(UT2004ItemType.BIO_RIFLE)) {
+            groupPriority.put(UT2004ItemType.BIO_RIFLE, 0.0);
+            groupPriority.put(UT2004ItemType.BIO_RIFLE_AMMO, 3.0 * (weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.BIO_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO));
+        } else {
+            groupPriority.put(UT2004ItemType.BIO_RIFLE, 3.0);
+            groupPriority.put(UT2004ItemType.BIO_RIFLE_AMMO, 1.5 * (weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.BIO_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.BIO_RIFLE_AMMO));
         }
 
         groupPriority.put(UT2004ItemType.ASSAULT_RIFLE_AMMO, 1.0 * (weaponry.getMaxAmmo(UT2004ItemType.ASSAULT_RIFLE_AMMO) - weaponry.getWeaponAmmo(UT2004ItemType.ASSAULT_RIFLE)) / weaponry.getMaxAmmo(UT2004ItemType.ASSAULT_RIFLE_AMMO));

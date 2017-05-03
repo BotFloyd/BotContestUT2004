@@ -214,7 +214,7 @@ public class Engage extends Behavior {
             navigation.stopNavigation();
             shoot.shoot(new Location(location.x, location.y, location.z - 80));
         } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER)){
-            shoot.changeWeaponNow(UT2004ItemType.REDEEMER);
+            shoot.changeWeaponNow(UT2004ItemType.ION_PAINTER);
             navigation.stopNavigation();
             shoot.shoot(new Location(location.x, location.y, location.z - 80));
         } else if (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN)) {  
