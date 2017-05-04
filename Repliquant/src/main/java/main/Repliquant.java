@@ -260,6 +260,10 @@ public class Repliquant extends UT2004BotModuleController {
         return currentWeapon;
     }
 
+    public double getRisque() {
+        return risque;
+    }
+
     public void setTarget(Player target) {
         this.target = target;
     }

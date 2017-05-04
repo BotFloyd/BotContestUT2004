@@ -22,6 +22,7 @@ public class Collect extends Behavior {
     Map<UT2004ItemType, Double> groupPriority = new HashMap();
     TabooSet<Item> tabooItems;
     IUT2004Navigation navigation;
+    double risque;
 
     private void initVars(Repliquant unBot) {
         items = unBot.getItems();
@@ -29,6 +30,7 @@ public class Collect extends Behavior {
         weaponry = unBot.getWeaponry();
         nav = unBot.getNavPoints();
         tabooItems = unBot.getTabooItems();
+        risque = unBot.getRisque();
         if (unBot.getNMNav().isAvailable()) {
             navigation = unBot.getNMNav();
         } else {
@@ -71,12 +73,20 @@ public class Collect extends Behavior {
 
     private void updateGroupPriority() {
 
-        groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 2.0 * (199 - info.getHealth()) / 199.0);
-        groupPriority.put(UT2004ItemType.HEALTH_PACK, 8.0 * (100 - info.getHealth()) / 100.0);
-        groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 8.0 * (199 - info.getHealth()) / 199.0);
-        groupPriority.put(UT2004ItemType.SHIELD_PACK, 5.0 * (50 - info.getLowArmor()) / 50.0);
-        groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 8.0 * (100 - info.getHighArmor()) / 100.0);
-
+        if (risque >= 0) {
+            groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 2.0 * (199 - info.getHealth()) / 199.0);
+            groupPriority.put(UT2004ItemType.HEALTH_PACK, 8.0 * (100 - info.getHealth()) / 100.0);
+            groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 8.0 * (199 - info.getHealth()) / 199.0);
+            groupPriority.put(UT2004ItemType.SHIELD_PACK, 5.0 * (50 - info.getLowArmor()) / 50.0);
+            groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 8.0 * (100 - info.getHighArmor()) / 100.0);
+        } else {
+            groupPriority.put(UT2004ItemType.MINI_HEALTH_PACK, 4.0 * (199 - info.getHealth()) / 199.0);
+            groupPriority.put(UT2004ItemType.HEALTH_PACK, 16.0 * (100 - info.getHealth()) / 100.0);
+            groupPriority.put(UT2004ItemType.SUPER_HEALTH_PACK, 16.0 * (199 - info.getHealth()) / 199.0);
+            groupPriority.put(UT2004ItemType.SHIELD_PACK, 10.0 * (50 - info.getLowArmor()) / 50.0);
+            groupPriority.put(UT2004ItemType.SUPER_SHIELD_PACK, 16.0 * (100 - info.getHighArmor()) / 100.0);
+        }
+        
         if (weaponry.hasLoadedWeapon()) {
             if (info.getRemainingUDamageTime() < 0) {
                 groupPriority.put(UT2004ItemType.U_DAMAGE_PACK, 5.0);
