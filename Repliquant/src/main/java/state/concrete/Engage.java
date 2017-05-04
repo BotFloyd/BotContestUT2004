@@ -170,6 +170,7 @@ public class Engage extends Behavior {
                 move.jump();
             }
         } else if (!back.isResult() && !bottomBack.isResult() && action >= 40 && action < 50) {
+                result = true;
                 moveBackwards();
         } else if (action >= 50 && action <= 60) {
             result = true;
