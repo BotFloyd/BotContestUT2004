@@ -39,31 +39,23 @@ import java.util.Map;
 public class Repliquant extends UT2004BotModuleController {
 
     private Behavior now;
-    private Pursue pursue;
-    private Collect collect;
-    private Engage engage;
-    private Defense defense;
-    private Travel travel;
-    private Dodge dodge;
-    private Initialization initialization;
+    private final Pursue pursue = new Pursue();;
+    private final Collect collect = new Collect();
+    private final Engage engage = new Engage();
+    private final Defense defense = new Defense();
+    private final Travel travel = new Travel();
+    private final Dodge dodge = new Dodge();
+    private final Initialization initialization = new Initialization();
     private Player target;
     private final List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
     private WeaponPreferences currentWeapon;
     private UT2004PathAutoFixer autoFixer;
     private double risque = 0;
-    private Item nearbyObj;
     private TabooSet<Item> tabooItems;
     private boolean canPursue = false;
-
+    
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
-        pursue = new Pursue();
-        collect = new Collect();
-        engage = new Engage();
-        defense = new Defense();
-        travel = new Travel();
-        dodge = new Dodge();
-        initialization = new Initialization();
         tabooItems = new TabooSet(bot);
         initialization.raycastingInit(this);
         initialization.navigationInit(this);
@@ -102,7 +94,7 @@ public class Repliquant extends UT2004BotModuleController {
                 return;
             }
         }
-        nearbyObj = items.getNearestVisibleItem();
+        Item nearbyObj = items.getNearestVisibleItem();
         if (nearbyObj != null && tabooItems.isTaboo(nearbyObj)) {
             nearbyObj = null;
         }
