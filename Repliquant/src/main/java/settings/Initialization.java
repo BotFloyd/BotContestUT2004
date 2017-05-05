@@ -138,6 +138,7 @@ public class Initialization {
 
     public void wPrefsInit(List<WeaponPreferences> wPrefs) {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.REDEEMER, 6, 0.9, true));
+        wPrefs.add(new WeaponPreferences(UT2004ItemType.ION_PAINTER, 6, 0.9, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.6, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.55, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.SNIPER_RIFLE, 8, 0.7, true));
