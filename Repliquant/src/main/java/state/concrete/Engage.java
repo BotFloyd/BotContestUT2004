@@ -93,8 +93,9 @@ public class Engage extends Behavior {
             if (distance > 4000 && (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN) || weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER) || weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER))) {
                 shootFarAway(unBot);
             } else if (distance > 700) {
-                if (!navigation.isNavigating())
+                if (!navigation.isNavigating()) {
                     navigation.navigate(location);
+                }
                 unBot.getLog().severe("location = " + location);
             } else if (distance < 300 && !back.isResult() && !bottomBack.isResult()) {
                 moveBackwards();
@@ -172,15 +173,15 @@ public class Engage extends Behavior {
                 move.jump();
             }
         } else if (!back.isResult() && !bottomBack.isResult() && action >= 40 && action < 50) {
-                result = true;
-                moveBackwards();
+            result = true;
+            moveBackwards();
         } else if (action >= 50 && action <= 60) {
             result = true;
         }
         unBot.getConfig().setSpeedMultiplier(1.0f);
         return (result);
     }
-    
+
     private void noAmmo(Repliquant unBot) {
         Item weapon = items.getPathNearestSpawnedItem(Category.WEAPON);
         Item ammo = items.getPathNearestSpawnedItem(Category.AMMO);

@@ -39,7 +39,8 @@ import java.util.Map;
 public class Repliquant extends UT2004BotModuleController {
 
     private Behavior now;
-    private final Pursue pursue = new Pursue();;
+    private final Pursue pursue = new Pursue();
+    ;
     private final Collect collect = new Collect();
     private final Engage engage = new Engage();
     private final Defense defense = new Defense();
@@ -53,7 +54,7 @@ public class Repliquant extends UT2004BotModuleController {
     private double risque = 0;
     private TabooSet<Item> tabooItems;
     private boolean canPursue = false;
-    
+
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
         tabooItems = new TabooSet(bot);
@@ -163,7 +164,6 @@ public class Repliquant extends UT2004BotModuleController {
             bot.getBotName().setInfo("COLLECT");
             now = collect;
             canPursue = false;
-            body.getCommunication().sendGlobalTextMessage("courage : " + risque);
         }
     }
 
@@ -186,7 +186,6 @@ public class Repliquant extends UT2004BotModuleController {
             }
         }
         canPursue = false;
-        body.getCommunication().sendGlobalTextMessage("courage : " + risque);
     }
 
     public void chooseWeapon() {
@@ -233,7 +232,6 @@ public class Repliquant extends UT2004BotModuleController {
             }
         }
         risque = (maxKills - info.getKills()) / (game.getFragLimit() * 1.0);
-        body.getCommunication().sendGlobalTextMessage("maxKills : " + maxKills + " getKills : " + info.getKills() + " getFragLimit : " + game.getFragLimit());
     }
 
     public Player getTarget() {

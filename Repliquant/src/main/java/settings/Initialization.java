@@ -154,6 +154,5 @@ public class Initialization {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.BIO_RIFLE, 2, 0.3, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.BIO_RIFLE, 2, 0.3, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 1, 0.5, true));
-        wPrefs.add(new WeaponPreferences(UT2004ItemType.ASSAULT_RIFLE, 5, 0.1, false));
     }
 }
