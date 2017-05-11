@@ -90,7 +90,7 @@ public class Engage extends Behavior {
         boolean choix;
         if (location != null) {
             distance = location.getDistance(unBot.getBot().getLocation());
-            if (distance > 4000 && (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN) || weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER) || weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER))) {
+            if (distance > 1500 && (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN) || weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER) || weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER))) {
                 shootFarAway(unBot);
             } else if (distance > 700) {
                 if (!navigation.isNavigating()) {
