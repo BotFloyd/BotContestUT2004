@@ -76,11 +76,7 @@ public class Engage extends Behavior {
         weaponry = unBot.getWeaponry();
         items = unBot.getItems();
         info = unBot.getInfo();
-        if (unBot.getNMNav().isAvailable()) {
-            navigation = unBot.getNMNav();
-        } else {
-            navigation = unBot.getNavigation();
-        }
+        navigation = unBot.getNavToUse();
     }
 
     @Override
@@ -93,10 +89,8 @@ public class Engage extends Behavior {
             if (distance > 1500 && (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN) || weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER) || weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER))) {
                 shootFarAway(unBot);
             } else if (distance > 700) {
-                if (!navigation.isNavigating()) {
+                if (!navigation.isNavigating())
                     navigation.navigate(location);
-                }
-                unBot.getLog().severe("location = " + location);
             } else if (distance < 300 && !back.isResult() && !bottomBack.isResult()) {
                 moveBackwards();
             } else {

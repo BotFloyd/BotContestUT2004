@@ -15,6 +15,7 @@ import cz.cuni.amis.pogamut.base.communication.worldview.object.IWorldObjectEven
 import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEvent;
 import cz.cuni.amis.pogamut.unreal.communication.messages.UnrealId;
 import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
+import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
@@ -40,17 +41,16 @@ public class Repliquant extends UT2004BotModuleController {
 
     private Behavior now;
     private final Pursue pursue = new Pursue();
-    ;
     private final Collect collect = new Collect();
     private final Engage engage = new Engage();
     private final Defense defense = new Defense();
     private final Travel travel = new Travel();
     private final Dodge dodge = new Dodge();
     private final Initialization initialization = new Initialization();
+    private IUT2004Navigation navToUse;
     private Player target;
     private final List<WeaponPreferences> wPrefs = new ArrayList<WeaponPreferences>();
     private WeaponPreferences currentWeapon;
-    private UT2004PathAutoFixer autoFixer;
     private double risque = 0;
     private TabooSet<Item> tabooItems;
     private boolean canPursue = false;
@@ -61,11 +61,7 @@ public class Repliquant extends UT2004BotModuleController {
         initialization.raycastingInit(this);
         initialization.navigationInit(this);
         initialization.wPrefsInit(wPrefs);
-        if (nmNav.isAvailable()) {
-            autoFixer = new UT2004PathAutoFixer(bot, nmNav.getPathExecutor(), fwMap, aStar, navBuilder);
-        } else {
-            autoFixer = new UT2004PathAutoFixer(bot, navigation.getPathExecutor(), fwMap, aStar, navBuilder);
-        }
+        navToUse = navigation;
     }
 
     @Override
@@ -88,12 +84,9 @@ public class Repliquant extends UT2004BotModuleController {
     @Override
     public void logic() throws PogamutException {
         if (nmNav.isAvailable()) {
-            if (!initialization.drawNavMesh(this)) {
-                return;
-            }
-            if (!initialization.drawOffMeshLinks(this)) {
-                return;
-            }
+            if (!initialization.drawNavMesh(this)) return;
+            if (!initialization.drawOffMeshLinks(this)) return;
+            navToUse = nmNav;
         }
         Item nearbyObj = items.getNearestVisibleItem();
         if (nearbyObj != null && tabooItems.isTaboo(nearbyObj)) {
@@ -253,6 +246,10 @@ public class Repliquant extends UT2004BotModuleController {
     public double getRisque() {
         return risque;
     }
+    
+    public IUT2004Navigation getNavToUse() {
+        return navToUse;
+    }
 
     public void setTarget(Player target) {
         this.target = target;
@@ -260,7 +257,7 @@ public class Repliquant extends UT2004BotModuleController {
 
     public static void main(String args[]) throws PogamutException {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
-                new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
                 new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }
 }

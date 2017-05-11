@@ -31,11 +31,7 @@ public class Collect extends Behavior {
         nav = unBot.getNavPoints();
         tabooItems = unBot.getTabooItems();
         risque = unBot.getRisque();
-        if (unBot.getNMNav().isAvailable()) {
-            navigation = unBot.getNMNav();
-        } else {
-            navigation = unBot.getNavigation();
-        }
+        navigation = unBot.getNavToUse();
     }
 
     @Override

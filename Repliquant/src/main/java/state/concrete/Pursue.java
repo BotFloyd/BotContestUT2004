@@ -9,11 +9,7 @@ public class Pursue extends Behavior {
     
     @Override
     public void performs(Repliquant unBot) {
-        IUT2004Navigation navigation;
-        if (unBot.getNMNav().isAvailable())
-            navigation = unBot.getNMNav();
-        else
-            navigation = unBot.getNavigation();
+        IUT2004Navigation navigation = unBot.getNavToUse();
         Player pursued = unBot.getTarget();
         navigation.navigate(pursued);
         if(!navigation.isNavigating()){

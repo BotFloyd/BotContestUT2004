@@ -10,11 +10,7 @@ public class Travel extends Behavior {
         
     @Override
     public void performs(Repliquant unBot) {
-        IUT2004Navigation navigation;
-        if (unBot.getNMNav().isAvailable())
-            navigation = unBot.getNMNav();
-        else
-            navigation = unBot.getNavigation();
+        IUT2004Navigation navigation = unBot.getNavToUse();
         Item obj = unBot.getItems().getNearestVisibleItem();
         if (navigation.isNavigating()) {
             if (obj != null) {
