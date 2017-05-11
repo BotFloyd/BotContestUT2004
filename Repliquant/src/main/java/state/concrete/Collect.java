@@ -66,7 +66,7 @@ public class Collect extends Behavior {
                 navigation.navigate(nav.getRandomNavPoint());
             } else {
                 navigation.navigate(selectedItem);
-                tabooItems.add(selectedItem, items.getItemRespawnTime(selectedItem));
+                tabooItems.add(selectedItem, (unBot.getRandom().nextDouble() * 0.5 + 1) * items.getItemRespawnTime(selectedItem));
             }
         }
     }

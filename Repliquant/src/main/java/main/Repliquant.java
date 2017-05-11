@@ -121,7 +121,7 @@ public class Repliquant extends UT2004BotModuleController {
             bot.getBotName().setInfo("TRAVEL");
             shoot.stopShooting();
             now = travel;
-            tabooItems.add(nearbyObj, items.getItemRespawnTime(nearbyObj));
+            tabooItems.add(nearbyObj, (random.nextDouble() * 0.5 + 1) * items.getItemRespawnTime(nearbyObj));
         } else {
             bot.getBotName().setInfo("COLLECT");
             shoot.stopShooting();
