@@ -36,6 +36,8 @@ import cz.cuni.amis.utils.exception.PogamutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import listener.TimeStuck;
+import state.concrete.Stuck;
 
 public class Repliquant extends UT2004BotModuleController {
 
@@ -46,6 +48,7 @@ public class Repliquant extends UT2004BotModuleController {
     private final Defense defense = new Defense();
     private final Travel travel = new Travel();
     private final Dodge dodge = new Dodge();
+    private final Stuck stuck = new Stuck();
     private final Initialization initialization = new Initialization();
     private IUT2004Navigation navToUse;
     private Player target;
@@ -54,6 +57,7 @@ public class Repliquant extends UT2004BotModuleController {
     private double risque = 0;
     private TabooSet<Item> tabooItems;
     private boolean canPursue = false;
+    private TimeStuck timeStuck = new TimeStuck();
 
     @Override
     public void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init) {
@@ -116,6 +120,9 @@ public class Repliquant extends UT2004BotModuleController {
             shoot.stopShooting();
             now = travel;
             tabooItems.add(nearbyObj, (random.nextDouble() * 0.5 + 1) * items.getItemRespawnTime(nearbyObj));
+        } else if(timeStuck.stuck(bot.getLocation())){
+            bot.getBotName().setInfo("STUCK");
+            now = stuck;
         } else {
             bot.getBotName().setInfo("COLLECT");
             shoot.stopShooting();
