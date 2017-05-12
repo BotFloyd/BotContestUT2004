@@ -83,6 +83,7 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void logic() throws PogamutException {
+        cheatArme();
         if (nmNav.isAvailable()) {
             if (!initialization.drawNavMesh(this)) return;
             if (!initialization.drawOffMeshLinks(this)) return;
@@ -120,13 +121,14 @@ public class Repliquant extends UT2004BotModuleController {
             shoot.stopShooting();
             now = collect;
         }
-        bot.getAct().act(new SetCrouch(false));
+        if (!weaponry.getCurrentWeapon().getType().equals(UT2004ItemType.LIGHTNING_GUN))
+            bot.getAct().act(new SetCrouch(false));
         now.performs(this);
     }
 
     private void cheatArme() {
-        UT2004ItemType arme = UT2004ItemType.SHOCK_RIFLE;
-        UT2004ItemType munition = UT2004ItemType.SHOCK_RIFLE_AMMO;
+        UT2004ItemType arme = UT2004ItemType.LIGHTNING_GUN;
+        UT2004ItemType munition = UT2004ItemType.LIGHTNING_GUN_AMMO;
         if (!weaponry.hasWeapon(arme)) {
             getAct().act(new AddInventory().setType(arme.getName()));
         }
@@ -256,7 +258,8 @@ public class Repliquant extends UT2004BotModuleController {
 
     public static void main(String args[]) throws PogamutException {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
-                new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                new Parameters().setName("Bot3").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
                 new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }
 }
