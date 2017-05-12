@@ -89,8 +89,9 @@ public class Engage extends Behavior {
             if (distance > 1500 && (weaponry.hasAmmoForWeapon(UT2004ItemType.LIGHTNING_GUN) || weaponry.hasAmmoForWeapon(UT2004ItemType.REDEEMER) || weaponry.hasAmmoForWeapon(UT2004ItemType.ION_PAINTER))) {
                 shootFarAway(unBot);
             } else if (distance > 700) {
-                if (!navigation.isNavigating())
+                if (!navigation.isNavigating()) {
                     navigation.navigate(location);
+                }
             } else if (distance < 300 && !back.isResult() && !bottomBack.isResult()) {
                 moveBackwards();
             } else {
@@ -192,7 +193,6 @@ public class Engage extends Behavior {
             selectedItem = ammo;
         }
         if (senses.seeIncomingProjectile() || senses.isShot()) {
-            unBot.getBody().getCommunication().sendGlobalTextMessage("see projectile");
             shoot.changeWeaponNow(UT2004ItemType.SHIELD_GUN);
             if (senses.getLastIncomingProjectile() != null) {
                 navigation.setFocus(senses.getLastIncomingProjectile().getLocation());
@@ -209,6 +209,7 @@ public class Engage extends Behavior {
             shoot.shoot();
             navigation.navigate(location);
         }
+        navigation.setFocus(null);
     }
 
     private void shootFarAway(Repliquant unBot) {
