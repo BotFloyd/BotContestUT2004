@@ -16,7 +16,6 @@ import cz.cuni.amis.pogamut.base3d.worldview.object.event.WorldObjectAppearedEve
 import cz.cuni.amis.pogamut.unreal.communication.messages.UnrealId;
 import cz.cuni.amis.pogamut.ut2004.agent.module.utils.TabooSet;
 import cz.cuni.amis.pogamut.ut2004.agent.navigation.IUT2004Navigation;
-import cz.cuni.amis.pogamut.ut2004.agent.navigation.UT2004PathAutoFixer;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
@@ -156,8 +155,6 @@ public class Repliquant extends UT2004BotModuleController {
                 currentWeapon.updateProbability();
             }
             target = null;
-            bot.getBotName().setInfo("COLLECT");
-            now = collect;
             canPursue = false;
         }
     }
@@ -259,7 +256,7 @@ public class Repliquant extends UT2004BotModuleController {
 
     public static void main(String args[]) throws PogamutException {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
-                //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
+                new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
                 new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
     }
 }
