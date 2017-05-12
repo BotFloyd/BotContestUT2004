@@ -22,6 +22,7 @@ import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.UT2004ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.AddInventory;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Initialize;
+import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.SetCrouch;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotDamaged;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.BotKilled;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.ConfigChange;
@@ -120,6 +121,7 @@ public class Repliquant extends UT2004BotModuleController {
             shoot.stopShooting();
             now = collect;
         }
+        bot.getAct().act(new SetCrouch(false));
         now.performs(this);
     }
 
