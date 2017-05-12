@@ -12,10 +12,10 @@ public class TimeStuck {
     private long timelimit;
     
     public boolean stuck(Location currentLocation){
-        if(!(location.equals(currentLocation))){
+        if(location == null || !(location.equals(currentLocation))){
             location = currentLocation;
             timelimit = System.currentTimeMillis() + 1200;
         }
-        return (timelimit >= System.currentTimeMillis()); 
+        return (System.currentTimeMillis() >= timelimit); 
     }
 }
