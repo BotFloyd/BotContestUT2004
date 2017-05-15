@@ -1,0 +1,162 @@
+@startuml
+
+class main.Repliquant {
+    - Player target
+    - List<WeaponPreferences> wPrefs
+    - UT2004PathAutoFixer autoFixer
+    - int mort, kill, risque
+    - Item nearbyObj
+    - TabooSet<Item> tabooItems
+    ~ IWorldObjectEventListener<Player, WorldObjectAppearedEvent<Player>> playerAppeared
+    + void botInitialized(GameInfo info, ConfigChange currentConfig, InitedMessage init)
+    + Initialize getInitializeCommand()
+    + void mapInfoObtained()
+    + void prepareBot(UT2004Bot bot)
+    + void logic()
+    + void playerKilled(PlayerKilled event)
+    + void botKilled(BotKilled event)
+    + void chooseWeapon()
+    + Player getTarget()
+    + Engage getEngage()
+    + TabooSet<Item> getTabooItems()
+    + WeaponPreferences getCurrentWeapon()
+    + void setTarget(Player target)
+    + {static} void main(String args[])
+    - void cheatArme()
+}
+
+class settings.Initialization {
+    - boolean navMeshDrawn, offMeshLinksDrawn
+    + void raycastingInit(Repliquant unBot)
+    + void navigationInit(Repliquant unBot)
+    + boolean drawNavMesh(Repliquant unBot)
+    + boolean drawOffMeshLinks(Repliquant unBot)
+    + void wPrefsInit (List <WeaponPreferences> wPrefs)
+    - void pathExecutorStateChange(IPathExecutorState event)
+}
+
+class settings.Parameters {
+    ~ UT2004BotParameters params
+    - String botSkin
+    - String name
+    + Parameters setParams(UT2004BotParameters params)
+    + String getBotSkin()
+    + Parameters setBotSkin(String botSkin)
+    + String getName()
+    + Parameters setName(String name)
+    + int getSkillLevel()
+    + Initialize initialize()
+}
+
+class settings.WeaponPreferences {
+    - UT2004ItemType weapon
+    - double weight
+    - double probability
+    - double initialProbability
+    - boolean usePrimary
+    - int nbKills
+    - int nbDeaths
+    + void updateProbability()
+    + double getProbability()
+    + UT2004ItemType getWeapon()
+    + boolean isUsingPrimary()
+    + void upNbKills()
+    + void upNbDeaths()
+}
+
+class listener.TimeStuck {
+    - Location location
+    - long timelimit
+    + boolean stuck(Location currentLocation)
+}
+
+package state {
+    abstract class Behavior {
+        + {abstract} void performs(Repliquant unBot)
+    }
+    package concrete {
+        class Collect {
+            ~ Items items
+            ~ AgentInfo info
+            ~ Weaponry weaponry
+            ~ NavPoints nav
+            ~ Map<UT2004ItemType, Double> groupPriority
+            ~ TabooSet<Item> tabooItems
+            ~ IUT2004Navigation navigation
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+            - void updateGroupPriority()
+        }
+        class Defense {
+            ~ AdvancedLocomotion move
+            ~ Players players
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+        }
+        class Dodge {
+            ~ Senses senses
+            ~ AgentInfo info
+            ~ AdvancedLocomotion move
+            + void performs(Repliquant unBot)
+            - boolean isDangerous(IncomingProjectile projectile)
+            - void initVars(Repliquant unBot)
+        }
+        class Engage {
+            ~ ImprovedShooting shoot
+            ~ Random random
+            ~ AdvancedLocomotion move
+            ~ Location location, alea
+            ~ Senses senses
+            ~ AutoTraceRay right, left, bottomLeft, bottomRight, bottomLeft2, bottomRight2, back, bottomBack
+            ~ WeaponPreferences weaponPref
+            ~ Weaponry weaponry
+            ~ Items items
+            ~ AgentInfo info
+            ~ IUT2004Navigation navigation
+            + void setRayRight(AutoTraceRay ray)
+            + void setRayLeft(AutoTraceRay ray)
+            + void setRayBottomLeft(AutoTraceRay ray)
+            + void setRayBottomRight(AutoTraceRay ray)
+            + void setRayBottomLeft2(AutoTraceRay ray)
+            + void setRayBottomRight2(AutoTraceRay ray)
+            + void setRayBack(AutoTraceRay ray)
+            + void setRayBottomBack(AutoTraceRay ray)
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+            - void moveBackwards()
+            - void shockRifle()
+            - boolean choixAction(Repliquant unBot)
+            - void noAmmo(Repliquant unBot)
+        }
+        class Stuck {
+            ~ IUT2004Navigation navigation
+            + void performs(Repliquant unBot)
+            - void initVars(Repliquant unBot)
+        }
+        class Pursue {
+            + void performs(Repliquant unBot)
+        }
+        class Travel {
+            + void performs(Repliquant unBot)
+        }
+    }
+}
+
+main.Repliquant o-- Behavior
+main.Repliquant o-- Collect
+main.Repliquant o-- Defense
+main.Repliquant o-- Dodge
+main.Repliquant o-- Engage
+main.Repliquant o-- Pursue
+main.Repliquant o-- Travel
+main.Repliquant o-- settings.Initialization
+main.Repliquant o-- settings.WeaponPreferences
+main.Repliquant <.. settings.Parameters
+main.Repliquant <.. listener.TimeStuck
+Behavior <|-- Collect
+Behavior <|-- Defense
+Behavior <|-- Dodge
+Behavior <|-- Engage
+Behavior <|-- Pursue
+Behavior <|-- Travel
+@enduml
