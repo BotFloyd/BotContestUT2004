@@ -152,7 +152,7 @@ main.Repliquant o-- Travel
 main.Repliquant o-- settings.Initialization
 main.Repliquant o-- settings.WeaponPreferences
 main.Repliquant <.. settings.Parameters
-main.Repliquant <.. listener.TimeStuck
+main.Repliquant o-- listener.TimeStuck
 Behavior <|-- Collect
 Behavior <|-- Defense
 Behavior <|-- Dodge
