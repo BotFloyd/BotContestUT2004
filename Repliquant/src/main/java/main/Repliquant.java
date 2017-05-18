@@ -87,7 +87,7 @@ public class Repliquant extends UT2004BotModuleController {
 
     @Override
     public void logic() throws PogamutException {
-        cheatArme();
+        //cheatArme();
         if (nmNav.isAvailable()) {
             if (!initialization.drawNavMesh(this)) return;
             if (!initialization.drawOffMeshLinks(this)) return;
@@ -267,6 +267,6 @@ public class Repliquant extends UT2004BotModuleController {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
                 //new Parameters().setName("Bot3").setBotSkin("HumanMaleA.MercMaleA").setSkillLevel(7),
                 //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
-                new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(7));
+                new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(6));
     }
 }

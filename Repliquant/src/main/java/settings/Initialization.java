@@ -141,7 +141,7 @@ public class Initialization {
         wPrefs.add(new WeaponPreferences(UT2004ItemType.ROCKET_LAUNCHER, 7, 0.55, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.SNIPER_RIFLE, 8, 0.7, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.FLAK_CANNON, 7, 0.7, true));
-        wPrefs.add(new WeaponPreferences(UT2004ItemType.FLAK_CANNON, 5, 0.1, false));
+        //wPrefs.add(new WeaponPreferences(UT2004ItemType.FLAK_CANNON, 5, 0.1, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.MINIGUN, 6, 0.6, true));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.MINIGUN, 6, 0.55, false));
         wPrefs.add(new WeaponPreferences(UT2004ItemType.LIGHTNING_GUN, 5, 0.5, true));
