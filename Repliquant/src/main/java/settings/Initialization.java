@@ -43,7 +43,7 @@ public class Initialization {
             }
         });
         raycasting.endRayInitSequence();
-        unBot.getAct().act(new Configuration().setDrawTraceLines(true).setAutoTrace(true));
+        unBot.getAct().act(new Configuration().setDrawTraceLines(false).setAutoTrace(true));
     }
 
     public void navigationInit(Repliquant unBot) {
