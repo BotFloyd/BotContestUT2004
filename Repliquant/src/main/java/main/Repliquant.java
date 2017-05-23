@@ -190,7 +190,7 @@ public class Repliquant extends UT2004BotModuleController {
     }
 
     public void chooseWeapon() {
-        double epsilon = 1.0;
+        double epsilon = 0.2;
         double x = random.nextDouble();
         double highestProbability = 0.0;
         WeaponPreferences temp = null;
