@@ -101,30 +101,30 @@ public class Repliquant extends UT2004BotModuleController {
             if (target == null || !target.isVisible()) {
                 target = players.getNearestVisibleEnemy();
             }
-            bot.getBotName().setInfo("ENGAGE");
+            //bot.getBotName().setInfo("ENGAGE");
             now = engage;
             canPursue = true;
         } else if (senses.isBeingDamaged()) {
-            bot.getBotName().setInfo("DEFENSE");
+            //bot.getBotName().setInfo("DEFENSE");
             now = defense;
         } else if (target == null && senses.seeIncomingProjectile()) {
-            bot.getBotName().setInfo("DODGE");
+            //bot.getBotName().setInfo("DODGE");
             now = dodge;
         } else if (target != null && weaponry.hasLoadedRangedWeapon() && (risque >= 0 || canPursue)) {
-            bot.getBotName().setInfo("PURSUE");
+            //bot.getBotName().setInfo("PURSUE");
             shoot.stopShooting();
             canPursue = false;
             now = pursue;
         } else if (nearbyObj != null && nearbyObj.getLocation().getDistance(bot.getLocation()) < 300) {
-            bot.getBotName().setInfo("TRAVEL");
+            //bot.getBotName().setInfo("TRAVEL");
             shoot.stopShooting();
             now = travel;
             tabooItems.add(nearbyObj, (random.nextDouble() * 0.5 + 1) * items.getItemRespawnTime(nearbyObj));
         } else if(timeStuck.stuck(bot.getLocation())){
-            bot.getBotName().setInfo("STUCK");
+            //bot.getBotName().setInfo("STUCK");
             now = stuck;
         } else {
-            bot.getBotName().setInfo("COLLECT");
+            //bot.getBotName().setInfo("COLLECT");
             shoot.stopShooting();
             now = collect;
         }
@@ -267,6 +267,6 @@ public class Repliquant extends UT2004BotModuleController {
         new UT2004BotRunner<UT2004Bot, Parameters>(Repliquant.class).setMain(true).startAgents(
                 //new Parameters().setName("Bot3").setBotSkin("HumanMaleA.MercMaleA").setSkillLevel(7),
                 //new Parameters().setName("Bot1").setBotSkin("HumanMaleA.MercMaleC").setSkillLevel(7),
-                new Parameters().setName("Bot2").setBotSkin("HumanFemaleA.MercFemaleB").setSkillLevel(6));
+                new Parameters().setName("Repliquant").setBotSkin("HumanMaleA.MercMaleA").setSkillLevel(6));
     }
 }
